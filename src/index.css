@@ -30,9 +30,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-@import 'tailwindcss';
+  @import 'tailwindcss';
 
-:root {
+  :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
     --bg: #16171d;
