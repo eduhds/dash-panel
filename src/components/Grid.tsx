@@ -132,10 +132,10 @@ export function Grid({
         startX: e.clientX,
         startY: e.clientY,
         widths: [...widths],
-        heights: [...rowHeights],
+        heights: [...rowHeights]
       });
     },
-    [widths, rowHeights],
+    [widths, rowHeights]
   );
 
   useEffect(() => {
@@ -259,7 +259,7 @@ export function Grid({
               onDragOver={handleDragOver}
               onDragLeave={() => setDragOverCellId(null)}
               onDrop={handleDrop}
-              onCardDragStart={(cellId) => {
+              onCardDragStart={cellId => {
                 dragSourceRef.current = cellId;
                 setDragSourceCellId(cellId);
               }}

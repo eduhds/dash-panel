@@ -18,8 +18,16 @@ function useMediaQuery(query: string): boolean {
 }
 
 function App() {
-  const { state, setColumnCount, setColumnWidths, setRowHeights, moveCard, addCard, removeCard, resetGrid } =
-    useGridPersist();
+  const {
+    state,
+    setColumnCount,
+    setColumnWidths,
+    setRowHeights,
+    moveCard,
+    addCard,
+    removeCard,
+    resetGrid
+  } = useGridPersist();
   const isPhone = useMediaQuery('(max-width: 640px)');
 
   const handleColumnCountChange = useCallback(
