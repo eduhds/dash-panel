@@ -8,6 +8,9 @@ interface CellProps {
   rowIndex: number;
   colIndex: number;
   isLastColumn: boolean;
+  isLastRow: boolean;
+  isFirstColumn: boolean;
+  isFirstRow: boolean;
   isDragOver: boolean;
   isDragSource: boolean;
   onColumnResizeStart: (colIndex: number, e: React.MouseEvent) => void;
@@ -27,6 +30,9 @@ export function Cell({
   rowIndex,
   colIndex,
   isLastColumn,
+  isLastRow,
+  isFirstColumn,
+  isFirstRow,
   isDragOver,
   isDragSource,
   onColumnResizeStart,
@@ -85,7 +91,7 @@ export function Cell({
           <button
             type='button'
             onClick={onAddCard}
-            className='flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 text-2xl text-gray-400 transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500'>
+            className='flex h-full w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 text-2xl text-gray-400 transition-colors hover:border-gray-400'>
             +
           </button>
         )}
@@ -99,7 +105,7 @@ export function Cell({
         />
       )}
 
-      {hasCard && (
+      {hasCard && !isLastRow && (
         <div
           className='absolute left-1/2 z-20 -translate-x-1/2 cursor-row-resize rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200'
           style={{ bottom: '-8px', width: '80%', height: '8px' }}
@@ -107,11 +113,35 @@ export function Cell({
         />
       )}
 
-      {hasCard && !isLastColumn && (
+      {hasCard && !isLastColumn && !isLastRow && (
         <div
-          className='absolute z-30 rounded-full border border-gray-300 bg-gray-200 transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-move'
-          style={{ right: '-7px', bottom: '-7px', width: '14px', height: '14px' }}
+          className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[se-resize]'
+          style={{ right: '-8px', bottom: '-8px', width: '8px', height: '8px' }}
           onMouseDown={e => onCornerResizeStart(colIndex, rowIndex, e)}
+        />
+      )}
+
+      {hasCard && !isFirstColumn && !isLastRow && (
+        <div
+          className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[sw-resize]'
+          style={{ left: '-8px', bottom: '-8px', width: '8px', height: '8px' }}
+          onMouseDown={e => onCornerResizeStart(colIndex - 1, rowIndex, e)}
+        />
+      )}
+
+      {hasCard && !isLastColumn && !isFirstRow && (
+        <div
+          className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[ne-resize]'
+          style={{ right: '-8px', top: '-8px', width: '8px', height: '8px' }}
+          onMouseDown={e => onCornerResizeStart(colIndex, rowIndex - 1, e)}
+        />
+      )}
+
+      {hasCard && !isFirstColumn && !isFirstRow && (
+        <div
+          className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[nw-resize]'
+          style={{ left: '-8px', top: '-8px', width: '8px', height: '8px' }}
+          onMouseDown={e => onCornerResizeStart(colIndex - 1, rowIndex - 1, e)}
         />
       )}
     </div>
