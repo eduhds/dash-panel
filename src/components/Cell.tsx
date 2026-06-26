@@ -116,7 +116,7 @@ export function Cell({
       {hasCard && !isLastColumn && !isLastRow && (
         <div
           className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[se-resize]'
-          style={{ right: '-8px', bottom: '-8px', width: '8px', height: '8px' }}
+          style={{ right: '-12px', bottom: '-12px', width: '16px', height: '16px' }}
           onMouseDown={e => onCornerResizeStart(colIndex, rowIndex, e)}
         />
       )}
@@ -124,7 +124,7 @@ export function Cell({
       {hasCard && !isFirstColumn && !isLastRow && (
         <div
           className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[sw-resize]'
-          style={{ left: '-8px', bottom: '-8px', width: '8px', height: '8px' }}
+          style={{ left: '-12px', bottom: '-12px', width: '16px', height: '16px' }}
           onMouseDown={e => onCornerResizeStart(colIndex - 1, rowIndex, e)}
         />
       )}
@@ -132,7 +132,7 @@ export function Cell({
       {hasCard && !isLastColumn && !isFirstRow && (
         <div
           className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[ne-resize]'
-          style={{ right: '-8px', top: '-8px', width: '8px', height: '8px' }}
+          style={{ right: '-12px', top: '-12px', width: '16px', height: '16px' }}
           onMouseDown={e => onCornerResizeStart(colIndex, rowIndex - 1, e)}
         />
       )}
@@ -140,7 +140,7 @@ export function Cell({
       {hasCard && !isFirstColumn && !isFirstRow && (
         <div
           className='absolute z-30 rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-[nw-resize]'
-          style={{ left: '-8px', top: '-8px', width: '8px', height: '8px' }}
+          style={{ left: '-12px', top: '-12px', width: '16px', height: '16px' }}
           onMouseDown={e => onCornerResizeStart(colIndex - 1, rowIndex - 1, e)}
         />
       )}
