@@ -72,6 +72,7 @@ export function Grid({
   const [dragOverCellId, setDragOverCellId] = useState<string | null>(null);
   const [dragSourceCellId, setDragSourceCellId] = useState<string | null>(null);
   const dragSourceRef = useRef<string | null>(null);
+  const pointerEventBlockerRef = useRef<HTMLDivElement | null>(null);
 
   const cols = useMemo(() => (isPhone ? 1 : state.columnCount), [isPhone, state.columnCount]);
   const widths = useMemo(
@@ -142,43 +143,48 @@ export function Grid({
     if (!resize) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (resize.kind === 'column') {
-        const containerWidth = containerRef.current?.offsetWidth ?? 1;
-        const deltaPx = e.clientX - resize.startX;
-        const deltaPercent = (deltaPx / containerWidth) * 100;
-        const i = resize.colIndex;
-        if (i + 1 >= resize.widths.length) return;
-        const result = distributeColumnDelta(resize.widths, i, deltaPercent);
-        if (result) onSetColumnWidths(result);
-      } else if (resize.kind === 'row') {
-        const deltaPx = e.clientY - resize.startY;
-        const nextHeights = [...resize.heights];
-        const r = resize.rowIndex;
-        if (r >= nextHeights.length) return;
-        const nr = nextHeights[r] + deltaPx;
-        if (nr >= MIN_ROW_HEIGHT) {
-          nextHeights[r] = nr;
-          onSetRowHeights(nextHeights);
-        }
-      } else {
-        const containerWidth = containerRef.current?.offsetWidth ?? 1;
-        const deltaX = e.clientX - resize.startX;
-        const deltaPercent = (deltaX / containerWidth) * 100;
-        const deltaY = e.clientY - resize.startY;
-
-        const ci = resize.colIndex;
-        if (ci + 1 < resize.widths.length) {
-          const result = distributeColumnDelta(resize.widths, ci, deltaPercent);
+      try {
+        if (resize.kind === 'column') {
+          const containerWidth = containerRef.current?.offsetWidth ?? 1;
+          const deltaPx = e.clientX - resize.startX;
+          const deltaPercent = (deltaPx / containerWidth) * 100;
+          const i = resize.colIndex;
+          if (i + 1 >= resize.widths.length) return;
+          const result = distributeColumnDelta(resize.widths, i, deltaPercent);
           if (result) onSetColumnWidths(result);
-        }
+        } else if (resize.kind === 'row') {
+          const deltaPx = e.clientY - resize.startY;
+          const nextHeights = [...resize.heights];
+          const r = resize.rowIndex;
+          if (r >= nextHeights.length) return;
+          const nr = nextHeights[r] + deltaPx;
+          if (nr >= MIN_ROW_HEIGHT) {
+            nextHeights[r] = nr;
+            onSetRowHeights(nextHeights);
+          }
+        } else {
+          const containerWidth = containerRef.current?.offsetWidth ?? 1;
+          const deltaX = e.clientX - resize.startX;
+          const deltaPercent = (deltaX / containerWidth) * 100;
+          const deltaY = e.clientY - resize.startY;
 
-        const nextHeights = [...resize.heights];
-        const ri = resize.rowIndex;
-        const nh1 = nextHeights[ri] + deltaY;
-        if (nh1 >= MIN_ROW_HEIGHT) {
-          nextHeights[ri] = nh1;
-          onSetRowHeights(nextHeights);
+          const ci = resize.colIndex;
+          if (ci + 1 < resize.widths.length) {
+            const result = distributeColumnDelta(resize.widths, ci, deltaPercent);
+            if (result) onSetColumnWidths(result);
+          }
+
+          const nextHeights = [...resize.heights];
+          const ri = resize.rowIndex;
+          const nh1 = nextHeights[ri] + deltaY;
+          if (nh1 >= MIN_ROW_HEIGHT) {
+            nextHeights[ri] = nh1;
+            onSetRowHeights(nextHeights);
+          }
         }
+      } catch (error) {
+        console.error('Error during resize:', error);
+        setResize(null);
       }
     };
 
@@ -202,13 +208,41 @@ export function Grid({
             : 'se-resize';
       document.body.style.cursor = cursor;
       document.body.style.userSelect = 'none';
+
+      if (!pointerEventBlockerRef.current) {
+        const blocker = document.createElement('div');
+        blocker.style.position = 'fixed';
+        blocker.style.top = '0';
+        blocker.style.left = '0';
+        blocker.style.width = '100%';
+        blocker.style.height = '100%';
+        blocker.style.zIndex = '9999';
+        blocker.style.cursor = cursor;
+        blocker.style.pointerEvents = 'auto';
+        document.body.appendChild(blocker);
+        pointerEventBlockerRef.current = blocker;
+      }
     } else {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+
+      if (pointerEventBlockerRef.current) {
+        document.body.removeChild(pointerEventBlockerRef.current);
+        pointerEventBlockerRef.current = null;
+      }
     }
     return () => {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+
+      if (pointerEventBlockerRef.current) {
+        try {
+          document.body.removeChild(pointerEventBlockerRef.current);
+        } catch {
+          /* already removed */
+        }
+        pointerEventBlockerRef.current = null;
+      }
     };
   }, [resize]);
 
@@ -243,6 +277,9 @@ export function Grid({
           const col = idx % cols;
           const row = Math.floor(idx / cols);
           const isLastCol = col === cols - 1;
+          const isLastRow = row === totalRows - 1;
+          const isFirstCol = col === 0;
+          const isFirstRow = row === 0;
 
           return (
             <Cell
@@ -251,6 +288,9 @@ export function Grid({
               rowIndex={row}
               colIndex={col}
               isLastColumn={isLastCol}
+              isLastRow={isLastRow}
+              isFirstColumn={isFirstCol}
+              isFirstRow={isFirstRow}
               isDragOver={dragOverCellId === cell.id}
               isDragSource={dragSourceCellId === cell.id}
               onColumnResizeStart={handleColumnResizeStart}
