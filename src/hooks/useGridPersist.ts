@@ -209,15 +209,10 @@ export function useGridPersist() {
   const removeCard = useCallback((cellId: string) => {
     setState(prev => {
       const idx = prev.cells.findIndex(c => c.id === cellId);
-      if (idx === -1) return prev;
+      if (idx === -1 || prev.cells[idx].card === null) return prev;
 
-      const newCells = prev.cells
-        .map((c, i) => {
-          if (i < idx) return c;
-          if (i < prev.cells.length - 1) return { ...c, card: prev.cells[i + 1].card };
-          return { ...c, card: null };
-        })
-        .slice(0, -1);
+      // Remove a célula do índice e desloca as posteriores
+      const newCells = prev.cells.filter((_, i) => i !== idx);
 
       const newRowCount = Math.ceil(newCells.length / prev.columnCount);
 
