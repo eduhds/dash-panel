@@ -11,12 +11,14 @@ function distributeColumnDelta(widths: number[], index: number, delta: number): 
   next[index] += delta;
   if (next[index] < MIN_COLUMN_PERCENT) return null;
 
-  const rest = widths.slice(index + 1);
-  const totalRest = rest.reduce((s, w) => s + w, 0);
-  if (totalRest <= 0) return next;
+  // Distribuir delta entre TODAS as outras colunas (antes e depois)
+  const otherWidths = widths.filter((_, i) => i !== index);
+  const totalOther = otherWidths.reduce((s, w) => s + w, 0);
+  if (totalOther <= 0) return next;
 
-  for (let j = index + 1; j < next.length; j++) {
-    const share = delta * (widths[j] / totalRest);
+  for (let j = 0; j < next.length; j++) {
+    if (j === index) continue;
+    const share = delta * (widths[j] / totalOther);
     next[j] -= share;
     if (next[j] < MIN_COLUMN_PERCENT) return null;
   }
