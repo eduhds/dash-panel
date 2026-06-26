@@ -22,9 +22,6 @@ interface CellProps {
   onRemoveCard: (cellId: string) => void;
 }
 
-const CORNER_CLASS =
-  'absolute z-30 rounded-full border border-gray-300 bg-gray-200 transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200';
-
 export function Cell({
   cell,
   rowIndex,
@@ -112,7 +109,7 @@ export function Cell({
 
       {hasCard && !isLastColumn && (
         <div
-          className={`${CORNER_CLASS} cursor-move`}
+          className='absolute z-30 rounded-full border border-gray-300 bg-gray-200 transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 cursor-move'
           style={{ right: '-7px', bottom: '-7px', width: '14px', height: '14px' }}
           onMouseDown={e => onCornerResizeStart(colIndex, rowIndex, e)}
         />

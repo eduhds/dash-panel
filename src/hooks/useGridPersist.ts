@@ -4,7 +4,9 @@ import type { CardData, CellData, GridState } from '../types';
 
 const STORAGE_KEY = 'dash-panel-grid-state';
 const INITIAL_HEIGHT = 200;
+
 function sampleWidget(title: string, value: string, subtitle: string, color: string): string {
+  return '<iframe src="https://randomcolour.com" style="width:100%;height:100%;border:none" />';
   return `<div style="display:flex;flex-direction:column;height:100%;padding:16px;box-sizing:border-box">
     <div style="flex-shrink:0;width:100%;height:3px;border-radius:2px;background:${color};margin-bottom:12px"></div>
     <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280">${title}</span>
