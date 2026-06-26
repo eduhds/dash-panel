@@ -11,19 +11,62 @@ function distributeColumnDelta(widths: number[], index: number, delta: number): 
   next[index] += delta;
   if (next[index] < MIN_COLUMN_PERCENT) return null;
 
-  // Distribuir delta entre TODAS as outras colunas (antes e depois)
-  const otherWidths = widths.filter((_, i) => i !== index);
+  // Tentar distribuir delta proporcionalmente entre TODAS as outras colunas
+  const otherIndices = Array.from({ length: next.length }, (_, i) => i).filter(i => i !== index);
+  const otherWidths = otherIndices.map(i => widths[i]);
   const totalOther = otherWidths.reduce((s, w) => s + w, 0);
   if (totalOther <= 0) return next;
 
-  for (let j = 0; j < next.length; j++) {
-    if (j === index) continue;
+  // Primeiro, tentar aplicar proporcionalmente
+  const proposedNext = [...next];
+  for (let j of otherIndices) {
     const share = delta * (widths[j] / totalOther);
-    next[j] -= share;
-    if (next[j] < MIN_COLUMN_PERCENT) return null;
+    proposedNext[j] -= share;
   }
 
-  return next;
+  // Verificar se todas as colunas respeitam o mínimo
+  const allValid = proposedNext.every(w => w >= MIN_COLUMN_PERCENT);
+  if (allValid) {
+    return proposedNext;
+  }
+
+  // Se não conseguir manter proporção, reduzir colunas que violam o mínimo
+  // enquanto as mantém no mínimo, e distribuir o resto
+  const result = [...next];
+  let remainingDelta = delta;
+
+  for (let j of otherIndices) {
+    const share = delta * (widths[j] / totalOther);
+    let newWidth = widths[j] - share;
+
+    if (newWidth < MIN_COLUMN_PERCENT) {
+      // Coluna atingiu mínimo
+      const excessDelta = newWidth - MIN_COLUMN_PERCENT;
+      remainingDelta -= excessDelta;
+      result[j] = MIN_COLUMN_PERCENT;
+    } else {
+      // Coluna OK
+      result[j] = newWidth;
+    }
+  }
+
+  // Distribuir o delta excedente entre as colunas que ainda têm espaço
+  if (remainingDelta !== 0) {
+    const flexibleIndices = otherIndices.filter(j => result[j] > MIN_COLUMN_PERCENT);
+    if (flexibleIndices.length > 0) {
+      const deltaPerColumn = remainingDelta / flexibleIndices.length;
+      for (let j of flexibleIndices) {
+        result[j] -= deltaPerColumn;
+        if (result[j] < MIN_COLUMN_PERCENT) {
+          result[j] = MIN_COLUMN_PERCENT;
+        }
+      }
+    }
+  }
+
+  // Validar resultado final
+  const finalValid = result.every(w => w >= MIN_COLUMN_PERCENT);
+  return finalValid ? result : null;
 }
 
 interface GridProps {
