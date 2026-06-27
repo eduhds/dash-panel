@@ -77,6 +77,7 @@ interface GridProps {
   onMoveCard: (fromCellId: string, toCellId: string) => void;
   onAddCard: () => void;
   onRemoveCard: (cellId: string) => void;
+  onUpdateContent: (cellId: string, content: string) => void;
 }
 
 type ResizeColumn = {
@@ -110,7 +111,8 @@ export function Grid({
   onSetRowHeights,
   onMoveCard,
   onAddCard,
-  onRemoveCard
+  onRemoveCard,
+  onUpdateContent
 }: GridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [resize, setResize] = useState<ResizeColumn | ResizeRow | ResizeCorner | null>(null);
@@ -354,6 +356,7 @@ export function Grid({
               }}
               onAddCard={onAddCard}
               onRemoveCard={onRemoveCard}
+              onUpdateContent={onUpdateContent}
             />
           );
         })}

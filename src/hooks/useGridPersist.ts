@@ -5,90 +5,10 @@ import type { CardData, CellData, GridState } from '../types';
 const STORAGE_KEY = 'dash-panel-grid-state';
 const INITIAL_HEIGHT = 200;
 
-function sampleWidget(title: string, value: string, subtitle: string, color: string): string {
-  return '<iframe src="https://randomcolour.com" style="width:100%;height:100%;border:none" />';
-  return `<div style="display:flex;flex-direction:column;height:100%;padding:16px;box-sizing:border-box">
-    <div style="flex-shrink:0;width:100%;height:3px;border-radius:2px;background:${color};margin-bottom:12px"></div>
-    <span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280">${title}</span>
-    <span style="font-size:28px;font-weight:700;color:#111827;margin-top:4px">${value}</span>
-    <span style="font-size:12px;color:#9ca3af;margin-top:auto">${subtitle}</span>
-  </div>`;
-}
-
-const SAMPLE_CARDS: CardData[] = [
-  {
-    id: 'card-1',
-    title: 'Receita Total',
-    content: sampleWidget('Receita Total', 'R$ 128.450', '+12% vs mês anterior', '#10b981'),
-    color: '#10b981'
-  },
-  {
-    id: 'card-2',
-    title: 'Usuários Ativos',
-    content: sampleWidget('Usuários Ativos', '24.380', '+8% vs mês anterior', '#3b82f6'),
-    color: '#3b82f6'
-  },
-  {
-    id: 'card-3',
-    title: 'Taxa de Conversão',
-    content: sampleWidget('Taxa de Conversão', '3,42%', '+0,8pp vs mês anterior', '#f59e0b'),
-    color: '#f59e0b'
-  },
-  {
-    id: 'card-4',
-    title: 'Ticket Médio',
-    content: sampleWidget('Ticket Médio', 'R$ 847', '+5% vs mês anterior', '#8b5cf6'),
-    color: '#8b5cf6'
-  },
-  {
-    id: 'card-5',
-    title: 'Novos Cadastros',
-    content: sampleWidget('Novos Cadastros', '3.215', '+22% vs mês anterior', '#06b6d4'),
-    color: '#06b6d4'
-  },
-  {
-    id: 'card-6',
-    title: 'Churn Rate',
-    content: sampleWidget('Churn Rate', '1,8%', '-0,3pp vs mês anterior', '#ef4444'),
-    color: '#ef4444'
-  },
-  {
-    id: 'card-7',
-    title: 'Net Promoter Score',
-    content: sampleWidget('Net Promoter Score', '72', '+5 vs trimestre anterior', '#14b8a6'),
-    color: '#14b8a6'
-  },
-  {
-    id: 'card-8',
-    title: 'Meta Mensal',
-    content: sampleWidget('Meta Mensal', '87%', 'Faltam R$ 18.200', '#f97316'),
-    color: '#f97316'
-  },
-  {
-    id: 'card-9',
-    title: 'Tarefas Pendentes',
-    content: sampleWidget('Tarefas Pendentes', '143', '34 com prioridade alta', '#6366f1'),
-    color: '#6366f1'
-  },
-  {
-    id: 'card-10',
-    title: 'Tempo Médio Sessão',
-    content: sampleWidget('Tempo Médio Sessão', '4min 32s', '+18s vs mês anterior', '#ec4899'),
-    color: '#ec4899'
-  },
-  {
-    id: 'card-11',
-    title: 'Bounce Rate',
-    content: sampleWidget('Bounce Rate', '32,5%', '-2,1pp vs mês anterior', '#a855f7'),
-    color: '#a855f7'
-  },
-  {
-    id: 'card-12',
-    title: 'ROI',
-    content: sampleWidget('ROI', '3,8x', '+0,4x vs trimestre anterior', '#22c55e'),
-    color: '#22c55e'
-  }
-];
+const SAMPLE_CARDS: CardData[] = Array.from({ length: 3 }, (_, i) => ({
+  id: `card-${i + 1}`,
+  content: '<iframe src="https://randomcolour.com" style="width:100%;height:100%;border:none" />'
+}));
 
 function generateId(): string {
   return crypto.randomUUID();
@@ -187,10 +107,7 @@ export function useGridPersist() {
 
       const newCard: CardData = {
         id: `card-${generateId()}`,
-        title: 'Novo Card',
-        content:
-          '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:#9ca3af">Vazio</div>',
-        color: '#9ca3af'
+        content: ''
       };
 
       const newCells = prev.cells.map((c, i) => (i === emptyIndex ? { ...c, card: newCard } : c));
@@ -224,6 +141,19 @@ export function useGridPersist() {
     });
   }, []);
 
+  const updateCardContent = useCallback((cellId: string, content: string) => {
+    setState(prev => ({
+      ...prev,
+      cells: prev.cells.map(cell =>
+        cell.id === cellId && cell.card ? { ...cell, card: { ...cell.card, content } } : cell
+      )
+    }));
+  }, []);
+
+  const replaceState = useCallback((newState: GridState) => {
+    setState(newState);
+  }, []);
+
   const resetGrid = useCallback(() => {
     setState(createInitialGrid());
   }, []);
@@ -236,6 +166,8 @@ export function useGridPersist() {
     moveCard,
     addCard,
     removeCard,
+    updateCardContent,
+    replaceState,
     resetGrid
   };
 }

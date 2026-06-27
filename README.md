@@ -1,34 +1,82 @@
-# React + TypeScript + Vite
+# Dash Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Bun](https://img.shields.io/badge/bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-Currently, two official plugins are available:
+Dashboard personalizável com grid responsivo, cards com suporte a HTML/iframe, temas dark/light, e persistência local.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- **Grid responsivo** — layout em CSS grid com redimensionamento de colunas e linhas via drag
+- **Cards** — conteúdo HTML/iframe, edição inline, drag & drop para reorganizar
+- **Temas dark/light** — alternância com persistência em `localStorage` e fallback para `prefers-color-scheme`
+- **Auto-hide do header** — oculta automaticamente, reaparece ao mover o mouse para o topo da tela, com opção de fixar
+- **Importar/Exportar** — salva e restaura o estado completo do grid via arquivo JSON
+- **Persistência local** — todo o estado (grid, título, tema, pin do header) salvo automaticamente no `localStorage`
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Stack
 
-Note: This will impact Vite dev & build performances.
+- React 19 + TypeScript + Vite + Bun
+- React Compiler (via babel-plugin-react-compiler)
+- Tailwind CSS v4
+- oxlint com regras type-aware
+- Prettier + lefthook (formatação e lint no pre-commit)
+- lucide-react (ícones), clsx (classes condicionais)
 
-## Expanding the Oxlint configuration
+## Começando
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+bun install
+bun run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Scripts
+
+| Comando           | Descrição                          |
+| ----------------- | ---------------------------------- |
+| `bun run dev` | Inicia servidor de desenvolvimento |
+| `bun run build` | Type-check + build de produção |
+| `bun run lint` | Executa oxlint |
+| `bun run format` | Formata código com Prettier |
+| `bun run preview` | Preview do build de produção |
+
+## Uso
+
+### Grid
+
+- Arraste as bordas entre colunas/linhas para redimensionar
+- Arraste cards para trocá-los de posição
+- Use o seletor de colunas no header para alterar a quantidade de colunas
+- Em dispositivos móveis (≤639px) o grid é fixo em 1 coluna
+
+### Cards
+
+- Passe o mouse sobre um card para ver os botões de editar e excluir
+- No modo edição, o conteúdo aceita HTML (incluindo iframes)
+- Card vazio exibe botão para adicionar novo card
+
+### Tema
+
+- Clique no ícone de sol/lua no header para alternar entre claro e escuro
+- A preferência é salva e restaurada automaticamente
+
+## Estrutura
+
+```
+src/
+  types.ts                   — CardData, CellData, GridState
+  hooks/
+    useGridPersist.ts        — estado do grid + persistência localStorage
+    useHeaderAutoHide.ts     — auto-hide do header com pin
+  components/
+    Grid.tsx                 — grid responsivo, resize, drag & drop
+    Cell.tsx                 — célula com handles de redimensionamento
+    Card.tsx                 — card com modos edição/visualização
+    ConfirmModal.tsx         — modal de confirmação reutilizável
+  App.tsx                    — layout, header, tema, modais, import/export
+  App.css                    — background gradiente, sombra do header
+  index.css                  — @import 'tailwindcss', @custom-variant dark
+```
