@@ -24,7 +24,9 @@ export function useHeaderAutoHide() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(isPinned));
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, [isPinned]);
 
   const clearTimer = useCallback(() => {
@@ -39,13 +41,16 @@ export function useHeaderAutoHide() {
     setIsVisible(true);
   }, [clearTimer]);
 
-  const scheduleHide = useCallback((delay: number) => {
-    clearTimer();
-    if (isPinnedRef.current) return;
-    timerRef.current = setTimeout(() => {
-      setIsVisible(false);
-    }, delay);
-  }, [clearTimer]);
+  const scheduleHide = useCallback(
+    (delay: number) => {
+      clearTimer();
+      if (isPinnedRef.current) return;
+      timerRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, delay);
+    },
+    [clearTimer]
+  );
 
   const togglePin = useCallback(() => {
     setIsPinned(prev => !prev);

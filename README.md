@@ -37,11 +37,11 @@ bun run dev
 
 | Comando           | Descrição                          |
 | ----------------- | ---------------------------------- |
-| `bun run dev` | Inicia servidor de desenvolvimento |
-| `bun run build` | Type-check + build de produção |
-| `bun run lint` | Executa oxlint |
-| `bun run format` | Formata código com Prettier |
-| `bun run preview` | Preview do build de produção |
+| `bun run dev`     | Inicia servidor de desenvolvimento |
+| `bun run build`   | Type-check + build de produção     |
+| `bun run lint`    | Executa oxlint                     |
+| `bun run format`  | Formata código com Prettier        |
+| `bun run preview` | Preview do build de produção       |
 
 ## Uso
 

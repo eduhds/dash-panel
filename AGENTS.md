@@ -41,12 +41,12 @@ src/
 
 Breakpoints (via `useMediaQuery` em App.tsx):
 
-| Tela | Largura | Colunas máx. | Select |
-|------|---------|-------------|--------|
-| Phone | ≤639px | 1 | oculto |
-| Small | 640-767px | 2 | opções 1-2 |
-| Medium | 768-1023px | 4 | opções 1-4 |
-| Large | ≥1024px | 6 | opções 1-6 |
+| Tela   | Largura    | Colunas máx. | Select     |
+| ------ | ---------- | ------------ | ---------- |
+| Phone  | ≤639px     | 1            | oculto     |
+| Small  | 640-767px  | 2            | opções 1-2 |
+| Medium | 768-1023px | 4            | opções 1-4 |
+| Large  | ≥1024px    | 6            | opções 1-6 |
 
 - `maxCols` calculado via `useMemo`, `columnCount` é automaticamente clampado via `useEffect`
 - Grid em phone: `gridTemplateColumns` fixa 1fr, `gridTemplateRows` fixa 180px
@@ -147,11 +147,11 @@ Breakpoints (via `useMediaQuery` em App.tsx):
 
 ## Persistência (localStorage)
 
-| Chave | Conteúdo | Local |
-|-------|----------|-------|
-| `dash-panel-grid-state` | `GridState` JSON | `useGridPersist` |
-| `dash-panel-title` | string | App.tsx |
-| `dash-panel-theme` | `'dark'` ou `'light'` | App.tsx |
+| Chave                      | Conteúdo              | Local               |
+| -------------------------- | --------------------- | ------------------- |
+| `dash-panel-grid-state`    | `GridState` JSON      | `useGridPersist`    |
+| `dash-panel-title`         | string                | App.tsx             |
+| `dash-panel-theme`         | `'dark'` ou `'light'` | App.tsx             |
 | `dash-panel-header-pinned` | `'true'` ou `'false'` | `useHeaderAutoHide` |
 
 ## Padrões de Código

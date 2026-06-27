@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import clsx from 'clsx';
 
+import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
 
 import type { CardData } from '../types';
@@ -66,7 +66,7 @@ export function Card({
         'group relative h-full w-full overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800',
         isEditing
           ? 'border-2 border-blue-400'
-          : 'cursor-grab active:cursor-grabbing select-none border border-gray-200 dark:border-gray-600',
+          : 'cursor-grab active:cursor-grabbing select-none border border-gray-200 dark:border-gray-600'
       )}>
       {isEditing ? (
         <div

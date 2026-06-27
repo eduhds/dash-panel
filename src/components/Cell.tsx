@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import clsx from 'clsx';
 
+import clsx from 'clsx';
 import { MoveIcon, PlusIcon } from 'lucide-react';
 
 import type { CellData } from '../types';
@@ -84,7 +84,7 @@ export function Cell({
         className={clsx(
           'h-full w-full rounded-lg p-0.5 transition-colors',
           isDragOver && 'ring-2 ring-blue-400 bg-blue-50',
-          !isDragOver && isDragSource && 'opacity-50',
+          !isDragOver && isDragSource && 'opacity-50'
         )}>
         {cell.card ? (
           <Card
