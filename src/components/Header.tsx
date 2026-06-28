@@ -1,14 +1,7 @@
 import { useCallback } from 'react';
 
 import clsx from 'clsx';
-import {
-  FileDownIcon,
-  FileUpIcon,
-  MoonIcon,
-  PinIcon,
-  SunIcon,
-  TrashIcon
-} from 'lucide-react';
+import { FileDownIcon, FileUpIcon, MoonIcon, PinIcon, SunIcon, TrashIcon } from 'lucide-react';
 
 import { ColumnSelector } from './ColumnSelector';
 
@@ -109,10 +102,7 @@ export function Header({
                 <PinIcon className='h-5 w-5' />
               </button>
 
-              <button
-                type='button'
-                onClick={onToggleTheme}
-                className={btnBase}>
+              <button type='button' onClick={onToggleTheme} className={btnBase}>
                 {isDark ? <SunIcon className='h-5 w-5' /> : <MoonIcon className='h-5 w-5' />}
               </button>
 
@@ -135,17 +125,11 @@ export function Header({
                 />
               )}
 
-              <button
-                type='button'
-                onClick={onImportClick}
-                className={btnBase}>
+              <button type='button' onClick={onImportClick} className={btnBase}>
                 <FileUpIcon className='h-5 w-5' />
               </button>
 
-              <button
-                type='button'
-                onClick={onExport}
-                className={btnBase}>
+              <button type='button' onClick={onExport} className={btnBase}>
                 <FileDownIcon className='h-5 w-5' />
               </button>
 

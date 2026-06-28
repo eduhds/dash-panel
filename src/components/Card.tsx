@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
 
-import { ConfirmModal } from './ConfirmModal';
 import type { CardData } from '../types';
+import { ConfirmModal } from './ConfirmModal';
 
 interface CardProps {
   card: CardData;
