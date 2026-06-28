@@ -18,13 +18,16 @@ src/
   hooks/
     useGridPersist.ts              — estado do grid + persistência localStorage
     useHeaderAutoHide.ts           — auto-hide do header com pin
+    useMediaQuery.ts               — hook genérico de media query
   components/
     Grid.tsx                       — grid responsivo, resize, drag & drop
     Cell.tsx                       — célula com handles de redimensionamento
     Card.tsx                       — card com modos edição/visualização
+    Header.tsx                     — ghost title + header fixo com auto-hide
+    ColumnSelector.tsx             — seletor customizado de colunas
     ConfirmModal.tsx               — modal de confirmação reutilizável
-  App.tsx                          — layout, header, tema, modais, import/export
-  App.css                          — background gradiente, sombra do header
+  App.tsx                          — layout, tema, modais, import/export, compose
+  App.css                          — background gradiente
   index.css                        — @import 'tailwindcss', @custom-variant dark
 ```
 
@@ -39,7 +42,7 @@ src/
 
 ## Responsividade
 
-Breakpoints (via `useMediaQuery` em App.tsx):
+Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 
 | Tela   | Largura    | Colunas máx. | Select     |
 | ------ | ---------- | ------------ | ---------- |
@@ -130,20 +133,23 @@ Breakpoints (via `useMediaQuery` em App.tsx):
 - Overlay fullscreen com `bg-black/40`, fecha ao clicar fora
 - Botão confirmar: azul (primary) ou vermelho (danger)
 
-## Título do Header
+## Header (Header.tsx)
 
-- `contentEditable`, persiste em `localStorage` (`dash-panel-title`)
-- Salva no blur ou Enter, reverte se vazio
-- `truncate` + `min-w-0` em telas pequenas
-- `hover:bg-gray-100` / `dark:hover:bg-gray-700`, `focus:ring-2 focus:ring-blue-400/40`
-
-## Botões do Header
-
-- Padrão: `rounded-md border border-gray-300 bg-white p-1 text-sm text-gray-600 shadow-sm transition-colors hover:bg-gray-100`
-- Tema: `dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600`
+- Ghost title spacer (`relative h-14`) no fluxo normal — o título centralizado rola junto com o conteúdo
+- Header fixo (`fixed inset-x-0 top-0 z-30`) que aparece/desaparece via `translate-y` e `opacity`
+- Recebe callbacks de `App.tsx`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onReset`
+- Botão padrão extraído em constante `btnBase` para reuso
+- Sombra inline com `shadow-[...]` em vez de classe `.app-header`
+- Título `contentEditable`, salva no blur ou Enter, reverte se vazio
 - Pin ativo: `border-blue-400 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400`
 - Reset (erro): `border-red-300 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20`
-- Select de colunas: join visual com ícone `Grid2X2Icon`, `<select>` invisível sobreposto (`opacity-0 absolute inset-0`), `pointer-events-none` nos elementos visuais
+
+## ColumnSelector (ColumnSelector.tsx)
+
+- Join visual com ícone `Grid2X2Icon`, `<select>` invisível sobreposto (`opacity-0 absolute inset-0`), `pointer-events-none` nos elementos visuais
+- Props: `columnCount`, `availableCols`, `onChange`
+
+## useMediaQuery (useMediaQuery.ts) — hook genérico de media query
 
 ## Persistência (localStorage)
 
