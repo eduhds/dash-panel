@@ -58,6 +58,7 @@ function App() {
   });
 
   useEffect(() => {
+    document.title = title;
     try {
       localStorage.setItem('dash-panel-title', title);
     } catch {
