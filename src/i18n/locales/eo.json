@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "Dash Panel",
+    "resetModal": {
+      "title": "Restarigi kradon",
+      "message": "Ĉu vi certas ke vi volas restarigi la kradon? Ĉiu stato perditos."
+    },
+    "importModal": {
+      "title": "Importi staton",
+      "message": "Ĉu vi certas ke vi volas importi ĉi tiun dosieron? La nuna stato anstataŭiĝos konstante."
+    },
+    "importError": {
+      "missingProps": "Nevalida dosiero: mankaj devigaj ecoj.",
+      "parseError": "Nevalida dosiero: ne eblis analizi la JSON."
+    }
+  },
+  "confirmModal": {
+    "cancel": "Nuligi",
+    "confirm": "Konfirmi"
+  },
+  "card": {
+    "deleteModal": {
+      "title": "Forigi karton",
+      "message": "Ĉu vi certas ke vi volas forigi ĉi tiun karton? Ĉi tiu ago ne estas malfarebla."
+    }
+  }
+}

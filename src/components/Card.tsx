@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import type { CardData } from '../types';
 import { ConfirmModal } from './ConfirmModal';
@@ -23,6 +24,7 @@ export function Card({
   onRemoveCard,
   onUpdateContent
 }: CardProps) {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -121,8 +123,8 @@ export function Card({
 
       <ConfirmModal
         isOpen={showDeleteConfirm}
-        title='Excluir card'
-        message='Tem certeza que deseja excluir este card? Esta ação não pode ser desfeita.'
+        title={t('card.deleteModal.title')}
+        message={t('card.deleteModal.message')}
         onConfirm={() => {
           setShowDeleteConfirm(false);
           onRemoveCard(cellId);

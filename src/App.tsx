@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import './App.css';
 import { ConfirmModal } from './components/ConfirmModal';
 import { Grid } from './components/Grid';
@@ -10,6 +12,7 @@ import { useMediaQuery } from './hooks/useMediaQuery';
 import type { GridState } from './types';
 
 function App() {
+  const { t } = useTranslation();
   const {
     state,
     setColumnCount,
@@ -29,9 +32,9 @@ function App() {
 
   const [title, setTitle] = useState<string>(() => {
     try {
-      return localStorage.getItem('dash-panel-title') ?? 'Dash Panel';
+      return localStorage.getItem('dash-panel-title') ?? t('app.title');
     } catch {
-      return 'Dash Panel';
+      return t('app.title');
     }
   });
 
@@ -81,25 +84,28 @@ function App() {
     URL.revokeObjectURL(url);
   }, [state]);
 
-  const handleImportFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const parsed = JSON.parse(ev.target?.result as string);
-        if (!parsed.columnCount || !parsed.cells || !parsed.columnWidths) {
-          alert('Arquivo inválido: propriedades obrigatórias ausentes.');
-          return;
+  const handleImportFile = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const parsed = JSON.parse(ev.target?.result as string);
+          if (!parsed.columnCount || !parsed.cells || !parsed.columnWidths) {
+            alert(t('app.importError.missingProps'));
+            return;
+          }
+          setImportData(parsed as GridState);
+        } catch {
+          alert(t('app.importError.parseError'));
         }
-        setImportData(parsed as GridState);
-      } catch {
-        alert('Arquivo inválido: não foi possível fazer o parse do JSON.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  }, []);
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    },
+    [t]
+  );
 
   const handleImportConfirm = useCallback(() => {
     if (importData) {
@@ -191,16 +197,16 @@ function App() {
 
       <ConfirmModal
         isOpen={importData !== null}
-        title='Importar estado'
-        message='Tem certeza que deseja importar este arquivo? O estado atual será substituído permanentemente.'
+        title={t('app.importModal.title')}
+        message={t('app.importModal.message')}
         onConfirm={handleImportConfirm}
         onCancel={handleImportCancel}
       />
 
       <ConfirmModal
         isOpen={isResetModalOpen}
-        title='Resetar grid'
-        message='Tem certeza que deseja resetar o grid? Todo o estado será perdido.'
+        title={t('app.resetModal.title')}
+        message={t('app.resetModal.message')}
         onConfirm={handleResetConfirm}
         onCancel={handleResetCancel}
         confirmVariant='danger'

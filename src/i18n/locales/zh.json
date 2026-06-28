@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "Dash Panel",
+    "resetModal": {
+      "title": "重置网格",
+      "message": "您确定要重置网格吗？所有状态将丢失。"
+    },
+    "importModal": {
+      "title": "导入状态",
+      "message": "您确定要导入此文件吗？当前状态将被永久替换。"
+    },
+    "importError": {
+      "missingProps": "无效文件：缺少必需属性。",
+      "parseError": "无效文件：无法解析JSON。"
+    }
+  },
+  "confirmModal": {
+    "cancel": "取消",
+    "confirm": "确认"
+  },
+  "card": {
+    "deleteModal": {
+      "title": "删除卡片",
+      "message": "您确定要删除此卡片吗？此操作无法撤销。"
+    }
+  }
+}

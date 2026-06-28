@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "Dash Panel",
+    "resetModal": {
+      "title": "Restablecer cuadrícula",
+      "message": "¿Estás seguro de que deseas restablecer la cuadrícula? Todo el estado se perderá."
+    },
+    "importModal": {
+      "title": "Importar estado",
+      "message": "¿Estás seguro de que deseas importar este archivo? El estado actual será reemplazado permanentemente."
+    },
+    "importError": {
+      "missingProps": "Archivo inválido: faltan propiedades obligatorias.",
+      "parseError": "Archivo inválido: no se pudo analizar el JSON."
+    }
+  },
+  "confirmModal": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  },
+  "card": {
+    "deleteModal": {
+      "title": "Eliminar tarjeta",
+      "message": "¿Estás seguro de que deseas eliminar esta tarjeta? Esta acción no se puede deshacer."
+    }
+  }
+}

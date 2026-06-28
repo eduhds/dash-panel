@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "Dash Panel",
+    "resetModal": {
+      "title": "Resetar grid",
+      "message": "Tem certeza que deseja resetar o grid? Todo o estado será perdido."
+    },
+    "importModal": {
+      "title": "Importar estado",
+      "message": "Tem certeza que deseja importar este arquivo? O estado atual será substituído permanentemente."
+    },
+    "importError": {
+      "missingProps": "Arquivo inválido: propriedades obrigatórias ausentes.",
+      "parseError": "Arquivo inválido: não foi possível fazer o parse do JSON."
+    }
+  },
+  "confirmModal": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  },
+  "card": {
+    "deleteModal": {
+      "title": "Excluir card",
+      "message": "Tem certeza que deseja excluir este card? Esta ação não pode ser desfeita."
+    }
+  }
+}

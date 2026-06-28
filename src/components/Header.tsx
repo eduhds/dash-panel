@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { FileDownIcon, FileUpIcon, MoonIcon, PinIcon, SunIcon, TrashIcon } from 'lucide-react';
 
 import { ColumnSelector } from './ColumnSelector';
+import { LanguageSelector } from './LanguageSelector';
 
 interface HeaderProps {
   title: string;
@@ -117,6 +118,7 @@ export function Header({
             </div>
 
             <div className='flex shrink-0 items-center gap-2'>
+              <LanguageSelector />
               {!isPhone && (
                 <ColumnSelector
                   columnCount={columnCount}
