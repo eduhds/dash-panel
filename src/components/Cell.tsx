@@ -34,7 +34,6 @@ export function Cell({
   rowIndex,
   colIndex,
   isLastColumn,
-  isLastRow,
   isFirstColumn,
   isFirstRow,
   isDragOver,
@@ -113,7 +112,7 @@ export function Cell({
         />
       )}
 
-      {hasCard && !isLastRow && (
+      {hasCard && (
         <div
           className='absolute left-1/2 z-20 -translate-x-1/2 cursor-row-resize rounded transition-colors duration-150 hover:bg-gray-300 active:bg-blue-200 dark:hover:bg-gray-600 dark:active:bg-blue-800'
           style={{ bottom: '-8px', width: '80%', height: '8px' }}
@@ -121,7 +120,7 @@ export function Cell({
         />
       )}
 
-      {hasCard && !isLastColumn && !isLastRow && (
+      {hasCard && !isLastColumn && (
         <div
           className='group absolute z-30 flex items-center justify-center rounded text-gray-400 transition-colors duration-150 hover:bg-gray-300 hover:text-gray-600 active:bg-blue-200 dark:text-gray-500 dark:hover:bg-gray-600 dark:hover:text-gray-300 dark:active:bg-blue-800 cursor-[se-resize]'
           style={{ right: '-12px', bottom: '-12px', width: '16px', height: '16px' }}
@@ -130,7 +129,7 @@ export function Cell({
         </div>
       )}
 
-      {hasCard && !isFirstColumn && !isLastRow && (
+      {hasCard && !isFirstColumn && (
         <div
           className='group absolute z-30 flex items-center justify-center rounded text-gray-400 transition-colors duration-150 hover:bg-gray-300 hover:text-gray-600 active:bg-blue-200 dark:text-gray-500 dark:hover:bg-gray-600 dark:hover:text-gray-300 dark:active:bg-blue-800 cursor-[sw-resize]'
           style={{ left: '-12px', bottom: '-12px', width: '16px', height: '16px' }}
