@@ -34,6 +34,7 @@ export function Card({
       contentRef.current.innerText = card.content;
       contentRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
   const handleSave = useCallback(() => {
