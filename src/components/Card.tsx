@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
 
+import { ConfirmModal } from './ConfirmModal';
 import type { CardData } from '../types';
 
 interface CardProps {
@@ -23,6 +24,7 @@ export function Card({
   onUpdateContent
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -93,7 +95,7 @@ export function Card({
 
           <button
             type='button'
-            onClick={() => onRemoveCard(cellId)}
+            onClick={() => setShowDeleteConfirm(true)}
             className='absolute left-1.5 top-1.5 z-10 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-red-300 bg-white p-1 text-red-600 shadow-sm opacity-0 transition-all hover:bg-red-50 group-hover:opacity-100 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20'>
             <Trash2Icon className='h-4 w-4' />
           </button>
@@ -116,6 +118,18 @@ export function Card({
           </button>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        title='Excluir card'
+        message='Tem certeza que deseja excluir este card? Esta ação não pode ser desfeita.'
+        onConfirm={() => {
+          setShowDeleteConfirm(false);
+          onRemoveCard(cellId);
+        }}
+        onCancel={() => setShowDeleteConfirm(false)}
+        confirmVariant='danger'
+      />
     </div>
   );
 }
