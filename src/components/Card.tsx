@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
@@ -16,7 +16,7 @@ interface CardProps {
   onUpdateContent: (cellId: string, content: string) => void;
 }
 
-export function Card({
+export const Card = memo(function Card({
   card,
   cellId,
   onDragStart,
@@ -135,4 +135,4 @@ export function Card({
       />
     </div>
   );
-}
+});

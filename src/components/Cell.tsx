@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 import clsx from 'clsx';
 import { MoveIcon, PlusIcon } from 'lucide-react';
@@ -29,7 +29,7 @@ interface CellProps {
   onUpdateContent: (cellId: string, content: string) => void;
 }
 
-export function Cell({
+export const Cell = memo(function Cell({
   cell,
   rowIndex,
   colIndex,
@@ -157,4 +157,4 @@ export function Cell({
       )}
     </div>
   );
-}
+});

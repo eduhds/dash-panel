@@ -293,10 +293,24 @@ export function Grid({
     };
   }, [resize]);
 
+  const handleDragLeave = useCallback(() => {
+    setDragOverCellId(null);
+  }, []);
+
   const handleDragOver = useCallback((e: React.DragEvent, cellId: string) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     setDragOverCellId(cellId);
+  }, []);
+
+  const handleCardDragStart = useCallback((cellId: string) => {
+    dragSourceRef.current = cellId;
+    setDragSourceCellId(cellId);
+  }, []);
+
+  const handleCardDragEnd = useCallback(() => {
+    dragSourceRef.current = null;
+    setDragSourceCellId(null);
   }, []);
 
   const handleDrop = useCallback(
@@ -344,16 +358,10 @@ export function Grid({
               onRowResizeStart={handleRowResizeStart}
               onCornerResizeStart={handleCornerResizeStart}
               onDragOver={handleDragOver}
-              onDragLeave={() => setDragOverCellId(null)}
+              onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onCardDragStart={cellId => {
-                dragSourceRef.current = cellId;
-                setDragSourceCellId(cellId);
-              }}
-              onCardDragEnd={() => {
-                dragSourceRef.current = null;
-                setDragSourceCellId(null);
-              }}
+              onCardDragStart={handleCardDragStart}
+              onCardDragEnd={handleCardDragEnd}
               onAddCard={onAddCard}
               onRemoveCard={onRemoveCard}
               onUpdateContent={onUpdateContent}
