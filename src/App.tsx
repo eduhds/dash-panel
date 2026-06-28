@@ -186,26 +186,32 @@ function App() {
 
   return (
     <div className='app-bg flex min-h-dvh flex-col dark:text-gray-100'>
-      <div className='sticky top-0 z-30'>
+      {/* Spacer no fluxo: ghost title sempre acompanha o scroll */}
+      <div className='relative h-14 pointer-events-none select-none'>
         <div
           className={clsx(
-            'absolute inset-0 flex items-center justify-center transition-opacity duration-300 pointer-events-none select-none',
+            'absolute inset-0 flex items-center justify-center transition-opacity duration-300',
             isVisible ? 'opacity-0' : 'opacity-100'
           )}>
           <span className='text-sm font-medium tracking-wide text-gray-400/60 dark:text-gray-600/60'>
             {title}
           </span>
         </div>
+      </div>
+
+      {/* Header fixo, aparece/desaparece sem afetar o fluxo */}
+      <div
+        className={clsx(
+          'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out',
+          isVisible
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0 pointer-events-none'
+        )}>
         <header
-          className={clsx(
-            'app-header relative border-b border-gray-200 bg-white/95 backdrop-blur-sm transition-all duration-300 ease-in-out dark:border-gray-700 dark:bg-gray-800/95',
-            isVisible
-              ? 'translate-y-0 opacity-100'
-              : '-translate-y-full opacity-0 pointer-events-none'
-          )}
+          className='app-header border-b border-gray-200 bg-white/95 backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/95 h-14'
           onMouseEnter={show}
           onMouseLeave={() => scheduleHide(1500)}>
-          <div className='mx-auto flex h-14 max-w-7xl items-center justify-between px-4'>
+          <div className='mx-auto flex h-full max-w-7xl items-center justify-between px-4'>
             <div className='flex min-w-0 flex-1 items-center gap-2'>
               <button
                 type='button'
