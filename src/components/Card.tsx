@@ -79,7 +79,7 @@ export function Card({
         />
       ) : (
         <div
-          className='h-full w-full p-3 overflow-hidden'
+          className='h-full w-full p-3 overflow-y-auto overflow-x-hidden'
           dangerouslySetInnerHTML={{ __html: card.content }}
         />
       )}
