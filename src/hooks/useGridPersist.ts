@@ -154,6 +154,17 @@ export function useGridPersist() {
     setState(newState);
   }, []);
 
+  const resetDimensions = useCallback(() => {
+    setState(prev => {
+      const rowCount = Math.ceil(prev.cells.length / prev.columnCount);
+      return {
+        ...prev,
+        columnWidths: Array.from({ length: prev.columnCount }, () => 100 / prev.columnCount),
+        rowHeights: Array.from({ length: rowCount }, () => INITIAL_HEIGHT)
+      };
+    });
+  }, []);
+
   const resetGrid = useCallback(() => {
     setState(createInitialGrid());
   }, []);
@@ -168,6 +179,7 @@ export function useGridPersist() {
     removeCard,
     updateCardContent,
     replaceState,
+    resetDimensions,
     resetGrid
   };
 }

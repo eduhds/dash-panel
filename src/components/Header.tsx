@@ -1,7 +1,15 @@
 import { useCallback } from 'react';
 
 import clsx from 'clsx';
-import { FileDownIcon, FileUpIcon, MoonIcon, PinIcon, SunIcon, TrashIcon } from 'lucide-react';
+import {
+  FileDownIcon,
+  FileUpIcon,
+  MoonIcon,
+  PinIcon,
+  RotateCcwIcon,
+  SunIcon,
+  TrashIcon
+} from 'lucide-react';
 
 import { ColumnSelector } from './ColumnSelector';
 import { LanguageSelector } from './LanguageSelector';
@@ -22,6 +30,7 @@ interface HeaderProps {
   onColumnCountChange: (count: number) => void;
   onImportClick: () => void;
   onExport: () => void;
+  onResetDimensions: () => void;
   onReset: () => void;
 }
 
@@ -44,6 +53,7 @@ export function Header({
   onColumnCountChange,
   onImportClick,
   onExport,
+  onResetDimensions,
   onReset
 }: HeaderProps) {
   const handleTitleBlur = useCallback(
@@ -133,6 +143,10 @@ export function Header({
 
               <button type='button' onClick={onExport} className={btnBase}>
                 <FileDownIcon className='h-5 w-5' />
+              </button>
+
+              <button type='button' onClick={onResetDimensions} className={btnBase}>
+                <RotateCcwIcon className='h-5 w-5' />
               </button>
 
               <button

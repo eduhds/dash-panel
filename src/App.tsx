@@ -23,6 +23,7 @@ function App() {
     removeCard,
     updateCardContent,
     replaceState,
+    resetDimensions,
     resetGrid
   } = useGridPersist();
   const isPhone = useMediaQuery('(max-width: 639px)');
@@ -129,6 +130,10 @@ function App() {
     setIsResetModalOpen(false);
   }, []);
 
+  const handleResetDimensions = useCallback(() => {
+    resetDimensions();
+  }, [resetDimensions]);
+
   const maxCols = useMemo(() => {
     if (isPhone) return 1;
     if (isSmall) return 2;
@@ -171,6 +176,7 @@ function App() {
         onColumnCountChange={handleColumnCountChange}
         onImportClick={() => fileInputRef.current?.click()}
         onExport={handleExport}
+        onResetDimensions={handleResetDimensions}
         onReset={() => setIsResetModalOpen(true)}
       />
 
