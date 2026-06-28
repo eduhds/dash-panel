@@ -26,9 +26,26 @@ src/
     Header.tsx                     — ghost title + header fixo com auto-hide
     ColumnSelector.tsx             — seletor customizado de colunas
     ConfirmModal.tsx               — modal de confirmação reutilizável
+    LanguageSelector.tsx           — seletor de idioma com bandeiras e dropdown
+  i18n/
+    index.ts                       — config i18next com LanguageDetector
+    languages.ts                   — definição das 5 línguas + matchLanguage()
+    locales/
+      eo.json                      — Esperanto (fallback)
+      pt-BR.json                   — Português (Brasil)
+      en.json                      — English
+      es.json                      — Español
+      zh.json                      — 中文
+  test/
+    setup.ts                       — setup vitest (jest-dom, cleanup, crypto polyfill)
+    utils.tsx                      — TestWrapper com instância i18n isolada (pt-BR)
   App.tsx                          — layout, tema, modais, import/export, compose
   App.css                          — background gradiente
   index.css                        — @import 'tailwindcss', @custom-variant dark
+
+e2e/
+  tests/
+    app.spec.ts                    — 12 testes E2E (Playwright)
 ```
 
 ## Temas (Dark/Light)
@@ -87,11 +104,11 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Handle de linha: `cursor-row-resize`, 80% largura, 8px altura, posicionado no gap inferior
 - Handles com `hover:bg-gray-300` / `dark:hover:bg-gray-600`, `active:bg-blue-200` / `dark:active:bg-blue-800`
 - **Cantos** (4): 16×16px, com ícone `MoveIcon` (opaco no hover via `group-hover:opacity-100`):
-  - Bottom-right: `cursor-[se-resize]`, `!isLastCol && !isLastRow`
-  - Bottom-left: `cursor-[sw-resize]`, `!isFirstCol && !isLastRow`
+  - Bottom-right: `cursor-[se-resize]`, `!isLastCol` (renderizado mesmo na última linha)
+  - Bottom-left: `cursor-[sw-resize]`, `!isFirstCol` (renderizado mesmo na última linha)
   - Top-right: `cursor-[ne-resize]`, `!isLastCol && !isFirstRow`
   - Top-left: `cursor-[nw-resize]`, `!isFirstCol && !isFirstRow`
-- Cantos na borda do container não são renderizados
+- Cantos na borda esquerda ou superior do container não são renderizados
 
 ## Card (Card.tsx)
 
@@ -106,7 +123,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Persistência automática em `localStorage` (chave `dash-panel-grid-state`)
 - 3 cards de amostra com iframe de `randomcolour.com`, 1 célula vazia
 - `columnCount` inicial: 3, `columnWidths` iguais, `rowHeights`: 200px
-- Ações: `setColumnCount`, `setColumnWidths`, `setRowHeights`, `moveCard`, `addCard`, `removeCard`, `updateCardContent`, `replaceState`, `resetGrid`
+- Ações: `setColumnCount`, `setColumnWidths`, `setRowHeights`, `moveCard`, `addCard`, `removeCard`, `updateCardContent`, `replaceState`, `resetDimensions`, `resetGrid`
 - Ao mudar `columnCount`: `columnWidths` e `rowHeights` recriados igualmente
 - `generateId()`: `crypto.randomUUID()`
 
@@ -126,6 +143,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - **Export**: `JSON.stringify(state, null, 2)` → Blob → download como `dash-panel-state.json`
 - **Import**: `<input type="file" accept=".json">` → FileReader → valida `columnCount`, `cells`, `columnWidths` → `ConfirmModal` → `replaceState()`
 - **Reset**: `ConfirmModal` com `confirmVariant='danger'` → `resetGrid()`
+- **Reset Dimensions** (não-destrutivo): `resetDimensions()` → equaliza larguras e alturas, mantém cards
 
 ## Modais (ConfirmModal.tsx)
 
@@ -137,7 +155,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 
 - Ghost title spacer (`relative h-14`) no fluxo normal — o título centralizado rola junto com o conteúdo
 - Header fixo (`fixed inset-x-0 top-0 z-30`) que aparece/desaparece via `translate-y` e `opacity`
-- Recebe callbacks de `App.tsx`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onReset`
+- Recebe callbacks de `App.tsx`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onResetDimensions`, `onReset`
 - Botão padrão extraído em constante `btnBase` para reuso
 - Sombra inline com `shadow-[...]` em vez de classe `.app-header`
 - Título `contentEditable`, salva no blur ou Enter, reverte se vazio
@@ -149,7 +167,46 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Join visual com ícone `Grid2X2Icon`, `<select>` invisível sobreposto (`opacity-0 absolute inset-0`), `pointer-events-none` nos elementos visuais
 - Props: `columnCount`, `availableCols`, `onChange`
 
+## LanguageSelector (LanguageSelector.tsx)
+
+- Dropdown customizado com bandeiras (emoji) e nome do idioma
+- Abre/fecha ao clicar, fecha ao clicar fora (`mousedown` listener no `document`)
+- Opção ativa destacada com `bg-blue-50 text-blue-700` / `dark:bg-blue-900/30 dark:text-blue-400`
+- 5 idiomas: Esperanto (🌐), Português (🇧🇷), English (🇺🇸), Español (🇪🇸), 中文 (🇨🇳)
+- Ao selecionar: `i18n.changeLanguage(code)`, detectado via `i18next-browser-languagedetector`
+- Ordem de detecção: `localStorage` → `navigator` → `htmlTag`; cache em `localStorage` (chave `dash-panel-lng`)
+
 ## useMediaQuery (useMediaQuery.ts) — hook genérico de media query
+
+## i18n / Idiomas
+
+- `react-i18next` + `i18next-browser-languagedetector`
+- Config em `src/i18n/index.ts`: fallback `'eo'`, detecção `localStorage → navigator → htmlTag`
+- 5 traduções em `src/i18n/locales/`: `eo.json` (fallback), `pt-BR.json`, `en.json`, `es.json`, `zh.json`
+- `src/i18n/languages.ts`: `LanguageOption[]` com `code`, `label`, `flag` + `matchLanguage()` que normaliza `en-US` → `en`, `pt` → `pt-BR`
+- `LanguageSelector.tsx` no header: dropdown com bandeiras, `i18n.changeLanguage(code)` ao selecionar
+- Testes unitários em `src/i18n/__tests__/languages.test.ts`
+
+## Testes
+
+### Unitários (Vitest)
+
+- **Runner**: Vitest (`vitest run` / `vitest`)
+- **Ambiente**: `jsdom`, config em `vite.config.ts` (`test.environment`, `test.setupFiles`)
+- **Setup**: `src/test/setup.ts` — `@testing-library/jest-dom/vitest`, `cleanup()`, polyfill `crypto.randomUUID()`
+- **Wrapper**: `src/test/utils.tsx` — `TestWrapper` com instância i18n isolada (idioma `pt-BR`)
+- **Arquivos**:
+  - `src/i18n/__tests__/languages.test.ts` — `matchLanguage()` com todas as combinações de locale
+  - `src/components/__tests__/ConfirmModal.test.tsx` — renderização, botões, clique no overlay, variantes
+  - `src/components/__tests__/Card.test.tsx` — renderização, edição, save/cancel, delete com confirmação
+
+### E2E (Playwright)
+
+- **Runner**: `@playwright/test` (`playwright test`)
+- **Config**: `playwright.config.ts` — Chromium, `screenshot: 'on'`, `video: 'on'`, `trace: 'retain-on-failure'`, `retries: 1`
+- **Servidor**: Vite iniciado via `webServer` (`bun run dev`) na porta 5173
+- **Script**: `bun run test:e2e`
+- **Arquivo**: `e2e/tests/app.spec.ts` — 12 testes: grid inicial, theme toggle, editar/salvar/cancelar card, deletar com cancelamento, deletar com confirmação, adicionar card, mudar colunas, trocar idioma, reset dimensions, viewport phone, reset destrutivo
 
 ## Persistência (localStorage)
 
@@ -159,6 +216,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 | `dash-panel-title`         | string                | App.tsx             |
 | `dash-panel-theme`         | `'dark'` ou `'light'` | App.tsx             |
 | `dash-panel-header-pinned` | `'true'` ou `'false'` | `useHeaderAutoHide` |
+| `dash-panel-lng`           | código do idioma      | i18next             |
 
 ## Padrões de Código
 
