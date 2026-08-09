@@ -1,3 +1,5 @@
+glob_matcher: doublestar
+
 pre-commit:
   parallel: false
   commands:
@@ -11,6 +13,10 @@ pre-commit:
       stage_fixed: true
     lint:fsd:
       run: bun run lint:fsd
+    forbid-foreign-lockfiles:
+      glob: '**/{package-lock.json,yarn.lock,pnpm-lock.yaml}'
+      run: exit 1
+      fail_text: 'Detectado lockfile de outro gerenciador de pacotes. Use bun.lockb/bun.lock (bun install).'
 
 commit-msg:
   commands:

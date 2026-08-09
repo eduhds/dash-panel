@@ -11,6 +11,13 @@
 - clsx (classes condicionais)
 - lucide-react (ícones)
 
+## Gerenciador de pacotes (bun)
+
+- Uso exclusivo do bun: `packageManager: "bun@1.3.13"`, `engines.bun` e guard `preinstall` em `scripts/check-package-manager.mjs`
+- O guard verifica `npm_config_user_agent` e aborta a instalação se o gerenciador não for bun
+- Lefthook bloqueia commit de lockfiles de outros gerenciadores (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) via comando `forbid-foreign-lockfiles`
+- `glob_matcher: doublestar` no lefthook (comportamento padrão de `**`)
+
 ## Estrutura (Feature-Sliced Design)
 
 Camadas (de cima para baixo): `app` → `pages` → `widgets` → `features` → `entities` → `shared`. Regras de dependência: uma camada só importa de camadas estritamente abaixo; slices da mesma camada não se importam entre si; imports externos passam sempre pela public API (`index.ts`) do slice/segmento. `src/test/` fica fora das camadas (infra de teste).
