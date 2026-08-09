@@ -3,7 +3,8 @@ import { memo, useCallback } from 'react';
 import clsx from 'clsx';
 import { MoveIcon, PlusIcon } from 'lucide-react';
 
-import type { CellData } from '../types';
+import type { CellData } from '@/types';
+
 import { Card } from './Card';
 
 interface CellProps {

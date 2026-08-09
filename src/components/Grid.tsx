@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import type { GridState } from '../types';
+import type { GridState } from '@/types';
+
 import { Cell } from './Cell';
 
 const MIN_COLUMN_PERCENT = 10;

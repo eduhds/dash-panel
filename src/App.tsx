@@ -2,14 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import { ConfirmModal } from '@/components/ConfirmModal';
+import { Grid } from '@/components/Grid';
+import { Header } from '@/components/Header';
+import { useGridPersist } from '@/hooks/useGridPersist';
+import { useHeaderAutoHide } from '@/hooks/useHeaderAutoHide';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import type { GridState } from '@/types';
+
 import './App.css';
-import { ConfirmModal } from './components/ConfirmModal';
-import { Grid } from './components/Grid';
-import { Header } from './components/Header';
-import { useGridPersist } from './hooks/useGridPersist';
-import { useHeaderAutoHide } from './hooks/useHeaderAutoHide';
-import { useMediaQuery } from './hooks/useMediaQuery';
-import type { GridState } from './types';
 
 function App() {
   const { t } = useTranslation();

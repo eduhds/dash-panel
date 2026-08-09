@@ -1,10 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { ConfirmModal } from '@/components/ConfirmModal';
+import { TestWrapper } from '@/test/utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { TestWrapper } from '../../test/utils';
-import { ConfirmModal } from '../ConfirmModal';
 
 function renderModal(props?: { confirmVariant?: 'primary' | 'danger' }) {
   const onConfirm = vi.fn();

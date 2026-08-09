@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import type { CardData, CellData, GridState } from '../types';
+import type { CardData, CellData, GridState } from '@/types';
 
 const STORAGE_KEY = 'dash-panel-grid-state';
 const INITIAL_HEIGHT = 200;

@@ -1,3 +1,4 @@
+import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 import babel from '@rolldown/plugin-babel';
@@ -9,7 +10,7 @@ export default defineConfig({
   plugins: [tailwindcss(), react(), babel({ presets: [reactCompilerPreset()] })],
   resolve: {
     alias: {
-      '@': './src'
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   test: {

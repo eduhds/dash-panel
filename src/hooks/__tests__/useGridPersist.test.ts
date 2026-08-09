@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { useGridPersist } from '@/hooks/useGridPersist';
 import { act, renderHook } from '@testing-library/react';
-
-import { useGridPersist } from '../useGridPersist';
 
 const STORAGE_KEY = 'dash-panel-grid-state';
 

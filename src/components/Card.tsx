@@ -4,7 +4,8 @@ import clsx from 'clsx';
 import { PencilLineIcon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import type { CardData } from '../types';
+import type { CardData } from '@/types';
+
 import { ConfirmModal } from './ConfirmModal';
 
 interface CardProps {
