@@ -137,9 +137,12 @@ Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 
 ## Handles de redimensionamento (entities/grid/ui/Cell.tsx)
 
-- Handle de coluna: `cursor-col-resize`, 8px largura, 80% altura, posicionado no gap direito
-- Handle de linha: `cursor-row-resize`, 80% largura, 8px altura, posicionado no gap inferior
-- Handles com `hover:bg-gray-300` / `dark:hover:bg-gray-600`, `active:bg-blue-200` / `dark:active:bg-blue-800`
+- Handle de coluna: `cursor-col-resize`, container 8px (gap direito, altura total da célula), linha vertical tracejada (`border-l-2 border-dashed`) com `h-[80%]` centralizada
+- Handle de linha: `cursor-row-resize`, container 8px (gap inferior, largura total da célula), linha horizontal tracejada (`border-b-2 border-dashed`) com `w-[80%]` centralizada
+- Grip central (apenas no hover, `group-hover:opacity-100`): botão circular 20px com `MoveHorizontalIcon` (coluna) / `MoveVerticalIcon` (linha)
+- Linha tracejada e grip só aparecem no hover (`opacity-0 group-hover:opacity-100`)
+- Grupos nomeados (`group/col`, `group/row`, `group/corner`) para hover individual por handle — evita que o `group` da célula (`Cell.tsx`) ative todos os handles ao mesmo tempo
+- Linha tracejada: `border-gray-300` / `dark:border-gray-600`, azul no hover; grip com `group-active:bg-blue-100` / `dark:group-active:bg-blue-900/30` durante o arrasto
 - **Cantos** (4): 16×16px, com ícone `MoveIcon` (opaco no hover via `group-hover:opacity-100`):
   - Bottom-right: `cursor-[se-resize]`, `!isLastCol` (renderizado mesmo na última linha)
   - Bottom-left: `cursor-[sw-resize]`, `!isFirstCol` (renderizado mesmo na última linha)
