@@ -23,5 +23,13 @@
       "title": "Excluir card",
       "message": "Tem certeza que deseja excluir este card? Esta ação não pode ser desfeita."
     }
+  },
+  "background": {
+    "color": "Cor de fundo",
+    "image": "Imagem de fundo",
+    "imagePlaceholder": "URL da imagem",
+    "apply": "Aplicar",
+    "random": "Aleatória",
+    "clear": "Limpar fundo"
   }
 }

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Grid, useGridPersist } from '@/entities/grid';
 import type { GridState } from '@/entities/grid';
+import { BackgroundFooter } from '@/features/background';
 import { useMediaQuery, useTheme } from '@/shared/lib';
 import { ConfirmModal } from '@/shared/ui';
 import { Header, useHeaderAutoHide } from '@/widgets/header';
@@ -175,6 +176,10 @@ function DashboardPage() {
           onUpdateContent={updateCardContent}
         />
       </main>
+
+      <footer className='px-4 pb-6 pt-2'>
+        <BackgroundFooter />
+      </footer>
 
       <ConfirmModal
         isOpen={importData !== null}

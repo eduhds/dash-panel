@@ -3,6 +3,30 @@
   transition: background 0.4s ease;
 }
 
+html.app-bg-color .app-bg {
+  background:
+    radial-gradient(ellipse 130% 80% at 50% -20%, rgba(255, 255, 255, 0.55), transparent 60%),
+    var(--app-bg-color, #f0f4f8);
+}
+
+html.app-bg-image .app-bg {
+  background:
+    linear-gradient(rgba(248, 250, 252, 0.62), rgba(248, 250, 252, 0.62)),
+    var(--app-bg-image, none) center / cover no-repeat;
+}
+
+html.dark.app-bg-color .app-bg {
+  background:
+    radial-gradient(ellipse 130% 80% at 50% -20%, rgba(255, 255, 255, 0.12), transparent 60%),
+    var(--app-bg-color, #111827);
+}
+
+html.dark.app-bg-image .app-bg {
+  background:
+    linear-gradient(rgba(17, 24, 39, 0.72), rgba(17, 24, 39, 0.72)),
+    var(--app-bg-image, none) center / cover no-repeat;
+}
+
 .dark .app-bg {
   background: #111827;
 }

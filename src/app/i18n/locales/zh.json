@@ -23,5 +23,13 @@
       "title": "删除卡片",
       "message": "您确定要删除此卡片吗？此操作无法撤销。"
     }
+  },
+  "background": {
+    "color": "背景颜色",
+    "image": "背景图片",
+    "imagePlaceholder": "图片 URL",
+    "apply": "应用",
+    "random": "随机",
+    "clear": "清除背景"
   }
 }

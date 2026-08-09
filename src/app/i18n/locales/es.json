@@ -23,5 +23,13 @@
       "title": "Eliminar tarjeta",
       "message": "¿Estás seguro de que deseas eliminar esta tarjeta? Esta acción no se puede deshacer."
     }
+  },
+  "background": {
+    "color": "Color de fondo",
+    "image": "Imagen de fondo",
+    "imagePlaceholder": "URL de la imagen",
+    "apply": "Aplicar",
+    "random": "Aleatoria",
+    "clear": "Limpiar fondo"
   }
 }

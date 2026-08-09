@@ -49,6 +49,12 @@ src/
       ui/LanguageSelector.tsx      — seletor de idioma com bandeiras e dropdown
       model/languages.ts           — definição das 5 línguas + matchLanguage()
       index.ts
+    background/
+      ui/BackgroundFooter.tsx      — footer sutil p/ definir cor ou imagem de fundo
+      model/useBackgroundPersist.ts — estado do background + persistência + classes CSS
+      model/presets.ts             — paletas de cores + presets de imagem (picsum.photos)
+      model/types.ts               — BackgroundState (type: 'color' | 'image')
+      index.ts
   entities/
     grid/
       model/types.ts               — CardData, CellData, GridState
@@ -218,6 +224,15 @@ Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 - Ao selecionar: `i18n.changeLanguage(code)`, detectado via `i18next-browser-languagedetector`
 - Ordem de detecção: `localStorage` → `navigator` → `htmlTag`; cache em `localStorage` (chave `dash-panel-lng`)
 
+## Background (features/background)
+
+- **BackgroundFooter** (renderizado após o grid, em `<footer>` centralizado) define cor **ou** imagem de fundo; opções em estilo ghost/sutil (pill com `backdrop-blur-sm`)
+- **Cor**: `input type="color"` + paleta `COLOR_PRESETS`. Aplica `radial-gradient` (blur suave) sobre a cor via `html.app-bg-color .app-bg` e `--app-bg-color`
+- **Imagem**: URL digitada (Enter/Aplicar), botão "Aleatória" (`picsum.photos` seed por timestamp) ou presets `IMAGE_PRESETS` (thumbnails). Aplica `var(--app-bg-image) center / cover no-repeat` via `html.app-bg-image .app-bg`
+- Cor e imagem são mutuamente exclusivas: definir uma limpa a outra (`useBackgroundPersist.setColor`/`setImage`)
+- `useBackgroundPersist`: `useLayoutEffect` aplica classes (`app-bg-color`/`app-bg-image`) + variáveis CSS no `<html>` e persiste em `localStorage` (`dash-panel-bg-state`); overlay de leitura (branco no light, `#111827` no dark) mantém cards legíveis
+- `clear` remove classes e variáveis, voltando ao gradiente padrão de `App.css`
+
 ## useMediaQuery (shared/lib/useMediaQuery.ts) — hook genérico de media query
 
 ## useTheme (shared/lib/useTheme.ts) — hook de tema dark/light
@@ -257,13 +272,14 @@ Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 
 ## Persistência (localStorage)
 
-| Chave                      | Conteúdo              | Local                                    |
-| -------------------------- | --------------------- | ---------------------------------------- |
-| `dash-panel-grid-state`    | `GridState` JSON      | `entities/grid/model/useGridPersist`     |
-| `dash-panel-title`         | string                | `pages/dashboard/ui/DashboardPage`       |
-| `dash-panel-theme`         | `'dark'` ou `'light'` | `shared/lib/useTheme`                    |
-| `dash-panel-header-pinned` | `'true'` ou `'false'` | `widgets/header/model/useHeaderAutoHide` |
-| `dash-panel-lng`           | código do idioma      | i18next                                  |
+| Chave                      | Conteúdo               | Local                                            |
+| -------------------------- | ---------------------- | ------------------------------------------------ |
+| `dash-panel-grid-state`    | `GridState` JSON       | `entities/grid/model/useGridPersist`             |
+| `dash-panel-title`         | string                 | `pages/dashboard/ui/DashboardPage`               |
+| `dash-panel-theme`         | `'dark'` ou `'light'`  | `shared/lib/useTheme`                            |
+| `dash-panel-header-pinned` | `'true'` ou `'false'`  | `widgets/header/model/useHeaderAutoHide`         |
+| `dash-panel-lng`           | código do idioma       | i18next                                          |
+| `dash-panel-bg-state`      | `BackgroundState` JSON | `features/background/model/useBackgroundPersist` |
 
 ## Padrões de Código
 

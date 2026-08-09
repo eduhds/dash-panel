@@ -23,5 +23,13 @@
       "title": "Forigi karton",
       "message": "Ĉu vi certas ke vi volas forigi ĉi tiun karton? Ĉi tiu ago ne estas malfarebla."
     }
+  },
+  "background": {
+    "color": "Fono-koloro",
+    "image": "Fono-bildo",
+    "imagePlaceholder": "Bild-URL",
+    "apply": "Apliki",
+    "random": "Hazarda",
+    "clear": "Forigi fonon"
   }
 }
