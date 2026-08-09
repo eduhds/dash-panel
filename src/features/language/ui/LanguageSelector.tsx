@@ -37,7 +37,7 @@ export function LanguageSelector() {
       <button
         type='button'
         onClick={handleToggle}
-        className='flex items-center gap-1 rounded-md border border-gray-300 bg-white p-1 text-sm text-gray-600 shadow-sm transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'>
+        className='flex items-center gap-1 rounded-md border border-transparent p-1 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-600'>
         <span className='text-base leading-none'>{currentLang.flag}</span>
         <span className='hidden sm:inline'>{currentLang.label}</span>
       </button>

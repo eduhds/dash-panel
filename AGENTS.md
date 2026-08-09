@@ -197,10 +197,12 @@ Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 - Header fixo (`fixed inset-x-0 top-0 z-30`) que aparece/desaparece via `translate-y` e `opacity`
 - Recebe callbacks de `DashboardPage`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onResetDimensions`, `onReset`
 - Botão padrão extraído em constante `btnBase` para reuso
+- Botões/ações em estilo **ghost**: ícone sempre visível, container (borda + fundo) só no hover — `border-transparent` + `hover:border-gray-300 hover:bg-gray-100` (Layout não desloca, borda transparente reserva espaço)
 - Sombra inline com `shadow-[...]` em vez de classe `.app-header`
 - Título `contentEditable`, salva no blur ou Enter, reverte se vazio
 - Pin ativo: `border-blue-400 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400`
 - Reset (erro): `border-red-300 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20`
+- Ghost também em `LanguageSelector` (flag+label sempre visíveis) e `ColumnSelector` (ícone + contagem)
 
 ## ColumnSelector (features/column-count/ui/ColumnSelector.tsx)
 

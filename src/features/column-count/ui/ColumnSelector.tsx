@@ -17,7 +17,7 @@ export function ColumnSelector({ columnCount, availableCols, onChange }: ColumnS
   );
 
   return (
-    <div className='relative flex cursor-pointer items-center overflow-hidden rounded-md border border-gray-300 bg-white shadow-sm transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600'>
+    <div className='relative flex cursor-pointer items-center overflow-hidden rounded-md border border-transparent transition-colors hover:border-gray-300 hover:bg-gray-100 dark:hover:border-gray-600 dark:hover:bg-gray-600'>
       <span className='pointer-events-none flex items-center justify-center px-1.5 py-1 text-gray-500 dark:text-gray-400'>
         <Grid2X2Icon className='h-5 w-5' />
       </span>

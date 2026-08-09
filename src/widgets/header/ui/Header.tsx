@@ -35,7 +35,7 @@ interface HeaderProps {
 }
 
 const btnBase =
-  'rounded-md border border-gray-300 bg-white p-1 text-sm text-gray-600 shadow-sm transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600';
+  'rounded-md border border-transparent p-1 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-600';
 
 export function Header({
   title,
@@ -105,10 +105,10 @@ export function Header({
                 type='button'
                 onClick={onTogglePin}
                 className={clsx(
-                  'shrink-0 rounded-md border p-1 text-sm shadow-sm transition-colors',
+                  'shrink-0 rounded-md border p-1 text-sm transition-colors',
                   isPinned
                     ? 'border-blue-400 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
+                    : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-100 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-600'
                 )}>
                 <PinIcon className='h-5 w-5' />
               </button>
@@ -152,7 +152,7 @@ export function Header({
               <button
                 type='button'
                 onClick={onReset}
-                className='rounded-md border border-red-300 bg-white p-1 text-sm text-red-600 shadow-sm transition-colors hover:bg-red-50 dark:border-red-700 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-red-900/20'>
+                className='rounded-md border border-transparent p-1 text-sm text-red-600 transition-colors hover:border-red-300 hover:bg-red-50 dark:text-red-400 dark:hover:border-red-700 dark:hover:bg-red-900/20'>
                 <TrashIcon className='h-5 w-5' />
               </button>
             </div>
