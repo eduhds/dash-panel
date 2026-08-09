@@ -9,6 +9,8 @@ pre-commit:
       glob: '*.{js,ts,jsx,tsx}'
       run: bunx oxlint --fix {staged_files}
       stage_fixed: true
+    lint:fsd:
+      run: bun run lint:fsd
 
 commit-msg:
   commands:
