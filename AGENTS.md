@@ -6,47 +6,77 @@
 - React Compiler (via babel-plugin-react-compiler)
 - Tailwind CSS v4 (`@import 'tailwindcss'`, sem config file)
 - oxlint (linter), `tsc -b` (type-check)
+- steiger (linter FSD, `bun run lint:fsd`)
 - Prettier + lefthook (format/lint no pre-commit)
 - clsx (classes condicionais)
 - lucide-react (ícones)
 
-## Estrutura
+## Estrutura (Feature-Sliced Design)
+
+Camadas (de cima para baixo): `app` → `pages` → `widgets` → `features` → `entities` → `shared`. Regras de dependência: uma camada só importa de camadas estritamente abaixo; slices da mesma camada não se importam entre si; imports externos passam sempre pela public API (`index.ts`) do slice/segmento. `src/test/` fica fora das camadas (infra de teste).
 
 ```
 src/
-  types.ts                         — CardData, CellData, GridState
-  hooks/
-    useGridPersist.ts              — estado do grid + persistência localStorage
-    useHeaderAutoHide.ts           — auto-hide do header com pin
-    useMediaQuery.ts               — hook genérico de media query
-  components/
-    Grid.tsx                       — grid responsivo, resize, drag & drop
-    Cell.tsx                       — célula com handles de redimensionamento
-    Card.tsx                       — card com modos edição/visualização
-    Header.tsx                     — ghost title + header fixo com auto-hide
-    ColumnSelector.tsx             — seletor customizado de colunas
-    ConfirmModal.tsx               — modal de confirmação reutilizável
-    LanguageSelector.tsx           — seletor de idioma com bandeiras e dropdown
-  i18n/
-    index.ts                       — config i18next com LanguageDetector
-    languages.ts                   — definição das 5 línguas + matchLanguage()
-    locales/
-      eo.json                      — Esperanto (fallback)
-      pt-BR.json                   — Português (Brasil)
-      en.json                      — English
-      es.json                      — Español
-      zh.json                      — 中文
+  app/                             — entrypoint, estilos globais, providers
+    main.tsx                       — bootstrap React
+    App.tsx                        — raiz, renderiza <DashboardPage />
+    App.css                        — background gradiente
+    index.css                      — @import 'tailwindcss', @custom-variant dark
+    i18n/
+      index.ts                     — config i18next com LanguageDetector
+      locales/                     — eo.json, pt-BR.json, en.json, es.json, zh.json
+  pages/
+    dashboard/
+      ui/DashboardPage.tsx         — layout, título, import/export, modais, media queries
+      index.ts                     — public API (DashboardPage)
+  widgets/
+    header/
+      ui/Header.tsx                — ghost title + header fixo com auto-hide
+      model/useHeaderAutoHide.ts   — auto-hide do header com pin
+      index.ts
+  features/
+    column-count/
+      ui/ColumnSelector.tsx        — seletor customizado de colunas
+      index.ts
+    language/
+      ui/LanguageSelector.tsx      — seletor de idioma com bandeiras e dropdown
+      model/languages.ts           — definição das 5 línguas + matchLanguage()
+      index.ts
+  entities/
+    grid/
+      model/types.ts               — CardData, CellData, GridState
+      model/useGridPersist.ts      — estado do grid + persistência localStorage
+      lib/gridMath.ts              — distributeColumnDelta(), MIN_COLUMN_PERCENT, MIN_ROW_HEIGHT
+      ui/Grid.tsx                  — grid responsivo, resize, drag & drop
+      ui/Cell.tsx                  — célula com handles de redimensionamento
+      ui/Card.tsx                  — card com modos edição/visualização
+      index.ts
+  shared/
+    lib/useMediaQuery.ts           — hook genérico de media query
+    lib/useTheme.ts                — hook de tema dark/light + persistência
+    lib/index.ts
+    ui/confirm-modal/ConfirmModal.tsx — modal de confirmação reutilizável
+    ui/index.ts
   test/
     setup.ts                       — setup vitest (jest-dom, cleanup, crypto polyfill)
     utils.tsx                      — TestWrapper com instância i18n isolada (pt-BR)
-  App.tsx                          — layout, tema, modais, import/export, compose
-  App.css                          — background gradiente
-  index.css                        — @import 'tailwindcss', @custom-variant dark
 
+steiger.config.ts                  — linter FSD (fsd/insignificant-slice: off)
 e2e/
   tests/
     app.spec.ts                    — 12 testes E2E (Playwright)
 ```
+
+### Regras de dependência
+
+- `app` → `pages`/`widgets`/`features`/`entities`/`shared`
+- `pages` → `widgets`/`features`/`entities`/`shared`
+- `widgets` → `features`/`entities`/`shared`
+- `features` → `entities`/`shared`
+- `entities` → `shared`
+- `shared` → nada
+- Imports dentro do mesmo slice são relativos; imports entre slices usam a public API (ex.: `@/entities/grid`, `@/shared/lib`, `@/shared/ui`, `@/features/language`, `@/widgets/header`)
+- `fsd/insignificant-slice` está desligado (app pequeno, cada slice tem uma única referência)
 
 ## Temas (Dark/Light)
 
@@ -59,7 +89,7 @@ e2e/
 
 ## Responsividade
 
-Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
+Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 
 | Tela   | Largura    | Colunas máx. | Select     |
 | ------ | ---------- | ------------ | ---------- |
@@ -72,7 +102,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Grid em phone: `gridTemplateColumns` fixa 1fr, `gridTemplateRows` fixa 180px
 - Container `<main>`: `overflow-x-hidden`
 
-## Grid (Grid.tsx)
+## Grid (entities/grid/ui/Grid.tsx)
 
 - CSS grid com `gap: 8px`
 - `gridTemplateColumns`: `minmax(0, ${w}fr)` para evitar overflow horizontal
@@ -98,7 +128,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Célula fonte: `opacity-50`, célula alvo: `ring-2 ring-blue-400 bg-blue-50`
 - Drop faz **swap** de cards (troca) entre células
 
-## Handles de redimensionamento (Cell.tsx)
+## Handles de redimensionamento (entities/grid/ui/Cell.tsx)
 
 - Handle de coluna: `cursor-col-resize`, 8px largura, 80% altura, posicionado no gap direito
 - Handle de linha: `cursor-row-resize`, 80% largura, 8px altura, posicionado no gap inferior
@@ -110,7 +140,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
   - Top-left: `cursor-[nw-resize]`, `!isFirstCol && !isFirstRow`
 - Cantos na borda esquerda ou superior do container não são renderizados
 
-## Card (Card.tsx)
+## Card (entities/grid/ui/Card.tsx)
 
 - Borda arredondada, shadow, `bg-white` / `dark:bg-gray-800`
 - `cursor-grab` / `active:cursor-grabbing`, `select-none`
@@ -118,7 +148,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Botões de ação (edit/delete): `rounded-full`, `h-7 w-7`, estilo de borda e hover seguem header, `opacity-0 group-hover:opacity-100`
 - Modo edição: textarea contentEditable com `bg-amber-50` / `dark:bg-gray-700`, salva/cancela com botões no canto inferior direito
 
-## Estado (useGridPersist.ts)
+## Estado (entities/grid/model/useGridPersist.ts)
 
 - Persistência automática em `localStorage` (chave `dash-panel-grid-state`)
 - 3 cards de amostra com iframe de `randomcolour.com`, 1 célula vazia
@@ -127,7 +157,7 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Ao mudar `columnCount`: `columnWidths` e `rowHeights` recriados igualmente
 - `generateId()`: `crypto.randomUUID()`
 
-## Header Auto-Hide (useHeaderAutoHide.ts)
+## Header Auto-Hide (widgets/header/model/useHeaderAutoHide.ts)
 
 - **Pin**: persistido em `localStorage` (`dash-panel-header-pinned`)
 - **Comportamento**:
@@ -138,36 +168,36 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
   5. Fixado: header sempre visível
 - Usa refs (`isPinnedRef`, `isVisibleRef`) para evitar stale closures no listener `mousemove` global
 
-## Importação/Exportação (App.tsx)
+## Importação/Exportação (pages/dashboard/ui/DashboardPage.tsx)
 
 - **Export**: `JSON.stringify(state, null, 2)` → Blob → download como `dash-panel-state.json`
 - **Import**: `<input type="file" accept=".json">` → FileReader → valida `columnCount`, `cells`, `columnWidths` → `ConfirmModal` → `replaceState()`
 - **Reset**: `ConfirmModal` com `confirmVariant='danger'` → `resetGrid()`
 - **Reset Dimensions** (não-destrutivo): `resetDimensions()` → equaliza larguras e alturas, mantém cards
 
-## Modais (ConfirmModal.tsx)
+## Modais (shared/ui/confirm-modal/ConfirmModal.tsx)
 
 - Props: `isOpen`, `title`, `message`, `onConfirm`, `onCancel`, `confirmVariant` (`'primary'` | `'danger'`)
 - Overlay fullscreen com `bg-black/40`, fecha ao clicar fora
 - Botão confirmar: azul (primary) ou vermelho (danger)
 
-## Header (Header.tsx)
+## Header (widgets/header/ui/Header.tsx)
 
 - Ghost title spacer (`relative h-14`) no fluxo normal — o título centralizado rola junto com o conteúdo
 - Header fixo (`fixed inset-x-0 top-0 z-30`) que aparece/desaparece via `translate-y` e `opacity`
-- Recebe callbacks de `App.tsx`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onResetDimensions`, `onReset`
+- Recebe callbacks de `DashboardPage`: `onTitleChange`, `onToggleTheme`, `onTogglePin`, `onImportClick`, `onExport`, `onResetDimensions`, `onReset`
 - Botão padrão extraído em constante `btnBase` para reuso
 - Sombra inline com `shadow-[...]` em vez de classe `.app-header`
 - Título `contentEditable`, salva no blur ou Enter, reverte se vazio
 - Pin ativo: `border-blue-400 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-400`
 - Reset (erro): `border-red-300 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20`
 
-## ColumnSelector (ColumnSelector.tsx)
+## ColumnSelector (features/column-count/ui/ColumnSelector.tsx)
 
 - Join visual com ícone `Grid2X2Icon`, `<select>` invisível sobreposto (`opacity-0 absolute inset-0`), `pointer-events-none` nos elementos visuais
 - Props: `columnCount`, `availableCols`, `onChange`
 
-## LanguageSelector (LanguageSelector.tsx)
+## LanguageSelector (features/language/ui/LanguageSelector.tsx)
 
 - Dropdown customizado com bandeiras (emoji) e nome do idioma
 - Abre/fecha ao clicar, fecha ao clicar fora (`mousedown` listener no `document`)
@@ -176,16 +206,21 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - Ao selecionar: `i18n.changeLanguage(code)`, detectado via `i18next-browser-languagedetector`
 - Ordem de detecção: `localStorage` → `navigator` → `htmlTag`; cache em `localStorage` (chave `dash-panel-lng`)
 
-## useMediaQuery (useMediaQuery.ts) — hook genérico de media query
+## useMediaQuery (shared/lib/useMediaQuery.ts) — hook genérico de media query
+
+## useTheme (shared/lib/useTheme.ts) — hook de tema dark/light
+
+- Estado `isDark` + `toggleTheme()`, classe `.dark` no `<html>`
+- Persistência em `localStorage` (`dash-panel-theme`), fallback para `prefers-color-scheme`
 
 ## i18n / Idiomas
 
 - `react-i18next` + `i18next-browser-languagedetector`
-- Config em `src/i18n/index.ts`: fallback `'eo'`, detecção `localStorage → navigator → htmlTag`
-- 5 traduções em `src/i18n/locales/`: `eo.json` (fallback), `pt-BR.json`, `en.json`, `es.json`, `zh.json`
-- `src/i18n/languages.ts`: `LanguageOption[]` com `code`, `label`, `flag` + `matchLanguage()` que normaliza `en-US` → `en`, `pt` → `pt-BR`
+- Config em `src/app/i18n/index.ts`: fallback `'eo'`, detecção `localStorage → navigator → htmlTag`
+- 5 traduções em `src/app/i18n/locales/`: `eo.json` (fallback), `pt-BR.json`, `en.json`, `es.json`, `zh.json`
+- `src/features/language/model/languages.ts`: `LanguageOption[]` com `code`, `label`, `flag` + `matchLanguage()` que normaliza `en-US` → `en`, `pt` → `pt-BR`
 - `LanguageSelector.tsx` no header: dropdown com bandeiras, `i18n.changeLanguage(code)` ao selecionar
-- Testes unitários em `src/i18n/__tests__/languages.test.ts`
+- Testes unitários em `src/features/language/model/__tests__/languages.test.ts`
 
 ## Testes
 
@@ -196,9 +231,9 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 - **Setup**: `src/test/setup.ts` — `@testing-library/jest-dom/vitest`, `cleanup()`, polyfill `crypto.randomUUID()`
 - **Wrapper**: `src/test/utils.tsx` — `TestWrapper` com instância i18n isolada (idioma `pt-BR`)
 - **Arquivos**:
-  - `src/i18n/__tests__/languages.test.ts` — `matchLanguage()` com todas as combinações de locale
-  - `src/components/__tests__/ConfirmModal.test.tsx` — renderização, botões, clique no overlay, variantes
-  - `src/components/__tests__/Card.test.tsx` — renderização, edição, save/cancel, delete com confirmação
+  - `src/features/language/model/__tests__/languages.test.ts` — `matchLanguage()` com todas as combinações de locale
+  - `src/shared/ui/confirm-modal/__tests__/ConfirmModal.test.tsx` — renderização, botões, clique no overlay, variantes
+  - `src/entities/grid/ui/__tests__/Card.test.tsx` — renderização, edição, save/cancel, delete com confirmação
 
 ### E2E (Playwright)
 
@@ -210,13 +245,13 @@ Breakpoints (via `useMediaQuery` em `hooks/useMediaQuery.ts`):
 
 ## Persistência (localStorage)
 
-| Chave                      | Conteúdo              | Local               |
-| -------------------------- | --------------------- | ------------------- |
-| `dash-panel-grid-state`    | `GridState` JSON      | `useGridPersist`    |
-| `dash-panel-title`         | string                | App.tsx             |
-| `dash-panel-theme`         | `'dark'` ou `'light'` | App.tsx             |
-| `dash-panel-header-pinned` | `'true'` ou `'false'` | `useHeaderAutoHide` |
-| `dash-panel-lng`           | código do idioma      | i18next             |
+| Chave                      | Conteúdo              | Local                                    |
+| -------------------------- | --------------------- | ---------------------------------------- |
+| `dash-panel-grid-state`    | `GridState` JSON      | `entities/grid/model/useGridPersist`     |
+| `dash-panel-title`         | string                | `pages/dashboard/ui/DashboardPage`       |
+| `dash-panel-theme`         | `'dark'` ou `'light'` | `shared/lib/useTheme`                    |
+| `dash-panel-header-pinned` | `'true'` ou `'false'` | `widgets/header/model/useHeaderAutoHide` |
+| `dash-panel-lng`           | código do idioma      | i18next                                  |
 
 ## Padrões de Código
 

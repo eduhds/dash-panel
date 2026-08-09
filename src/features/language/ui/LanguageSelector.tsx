@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { languages, matchLanguage } from '@/i18n/languages';
+import { languages, matchLanguage } from '../model/languages';
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();

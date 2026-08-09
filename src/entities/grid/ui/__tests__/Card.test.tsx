@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { Card } from '@/components/Card';
+import { Card } from '@/entities/grid';
 import { TestWrapper } from '@/test/utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

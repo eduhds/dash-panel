@@ -3,11 +3,11 @@ import { type ReactNode } from 'react';
 import i18n from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 
-import en from '@/i18n/locales/en.json';
-import eo from '@/i18n/locales/eo.json';
-import es from '@/i18n/locales/es.json';
-import ptBR from '@/i18n/locales/pt-BR.json';
-import zh from '@/i18n/locales/zh.json';
+import en from '@/app/i18n/locales/en.json';
+import eo from '@/app/i18n/locales/eo.json';
+import es from '@/app/i18n/locales/es.json';
+import ptBR from '@/app/i18n/locales/pt-BR.json';
+import zh from '@/app/i18n/locales/zh.json';
 
 const testI18n = i18n.createInstance();
 

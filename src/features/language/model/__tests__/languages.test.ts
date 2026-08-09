@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { languages, matchLanguage } from '@/i18n/languages';
+import { languages, matchLanguage } from '@/features/language';
 
 describe('languages', () => {
   it('has all 5 languages defined', () => {

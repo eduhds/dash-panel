@@ -11,8 +11,8 @@ import {
   TrashIcon
 } from 'lucide-react';
 
-import { ColumnSelector } from './ColumnSelector';
-import { LanguageSelector } from './LanguageSelector';
+import { ColumnSelector } from '@/features/column-count';
+import { LanguageSelector } from '@/features/language';
 
 interface HeaderProps {
   title: string;

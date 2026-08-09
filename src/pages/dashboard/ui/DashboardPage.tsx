@@ -2,17 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { ConfirmModal } from '@/components/ConfirmModal';
-import { Grid } from '@/components/Grid';
-import { Header } from '@/components/Header';
-import { useGridPersist } from '@/hooks/useGridPersist';
-import { useHeaderAutoHide } from '@/hooks/useHeaderAutoHide';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import type { GridState } from '@/types';
+import { Grid, useGridPersist } from '@/entities/grid';
+import type { GridState } from '@/entities/grid';
+import { useMediaQuery, useTheme } from '@/shared/lib';
+import { ConfirmModal } from '@/shared/ui';
+import { Header, useHeaderAutoHide } from '@/widgets/header';
 
-import './App.css';
-
-function App() {
+function DashboardPage() {
   const { t } = useTranslation();
   const {
     state,
@@ -49,29 +45,7 @@ function App() {
     }
   }, [title]);
 
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    try {
-      const stored = localStorage.getItem('dash-panel-theme');
-      if (stored === 'dark') return true;
-      if (stored === 'light') return false;
-    } catch {
-      /* ignore */
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark);
-    try {
-      localStorage.setItem('dash-panel-theme', isDark ? 'dark' : 'light');
-    } catch {
-      /* ignore */
-    }
-  }, [isDark]);
-
-  const toggleTheme = useCallback(() => {
-    setIsDark(prev => !prev);
-  }, []);
+  const { isDark, toggleTheme } = useTheme();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importData, setImportData] = useState<GridState | null>(null);
@@ -222,4 +196,4 @@ function App() {
   );
 }
 
-export default App;
+export { DashboardPage };
