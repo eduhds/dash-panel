@@ -135,7 +135,8 @@ function DashboardPage() {
   );
 
   return (
-    <div className='app-bg flex min-h-dvh flex-col dark:text-gray-100'>
+    <div className='relative flex min-h-dvh flex-col dark:text-gray-100'>
+      <div aria-hidden='true' className='app-bg fixed inset-0 -z-10' />
       <Header
         title={title}
         onTitleChange={setTitle}
