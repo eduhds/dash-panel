@@ -4,9 +4,13 @@
 }
 
 html.app-bg-color .app-bg {
-  background:
-    radial-gradient(ellipse 130% 80% at 50% -20%, rgba(255, 255, 255, 0.55), transparent 60%),
-    var(--app-bg-color, #f0f4f8);
+  background: radial-gradient(
+    ellipse 110% 85% at 50% 35%,
+    var(--app-bg-color, #f0f4f8) 0%,
+    color-mix(in srgb, var(--app-bg-color, #f0f4f8) 55%, #f0f4f8) 45%,
+    color-mix(in srgb, var(--app-bg-color, #f0f4f8) 20%, #eef2f6) 75%,
+    #f8f6f2 100%
+  );
 }
 
 html.app-bg-image .app-bg {
@@ -16,9 +20,13 @@ html.app-bg-image .app-bg {
 }
 
 html.dark.app-bg-color .app-bg {
-  background:
-    radial-gradient(ellipse 130% 80% at 50% -20%, rgba(255, 255, 255, 0.12), transparent 60%),
-    var(--app-bg-color, #111827);
+  background: radial-gradient(
+    ellipse 110% 85% at 50% 35%,
+    var(--app-bg-color, #111827) 0%,
+    color-mix(in srgb, var(--app-bg-color, #111827) 50%, #111827) 50%,
+    color-mix(in srgb, var(--app-bg-color, #111827) 18%, #111827) 80%,
+    #111827 100%
+  );
 }
 
 html.dark.app-bg-image .app-bg {
