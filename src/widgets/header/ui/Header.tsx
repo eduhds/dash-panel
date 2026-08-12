@@ -81,7 +81,7 @@ export function Header({
             'absolute inset-0 flex items-center justify-center transition-opacity duration-300',
             isVisible ? 'opacity-0' : 'opacity-100'
           )}>
-          <span className='text-sm font-medium tracking-wide text-gray-400/60 dark:text-gray-600/60'>
+          <span className='text-base font-semibold tracking-wide text-gray-500 dark:text-gray-400'>
             {title}
           </span>
         </div>
