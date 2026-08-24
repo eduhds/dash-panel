@@ -8,11 +8,13 @@
 ![Playwright](https://img.shields.io/badge/playwright-%232EAD33.svg?style=for-the-badge&logo=playwright&logoColor=white)
 ![Vitest](https://img.shields.io/badge/vitest-%236E4F13.svg?style=for-the-badge&logo=vitest&logoColor=white)
 
-| Light | Dark |
-| --- | --- |
+| Light                                       | Dark                                      |
+| ------------------------------------------- | ----------------------------------------- |
 | ![Light screenshot](./Screenshot_light.png) | ![Dark screenshot](./Screenshot_dark.png) |
 
 Dashboard personalizável com grid responsivo, cards com suporte a HTML/iframe, temas dark/light, i18n com 5 idiomas, e persistência local.
+
+**Acesse online:** [https://eduhds.github.io/dash-panel](https://eduhds.github.io/dash-panel)
 
 ## Funcionalidades
 
