@@ -113,7 +113,7 @@ Breakpoints (via `useMediaQuery` em `shared/lib/useMediaQuery.ts`):
 
 - `maxCols` calculado via `useMemo`, `columnCount` é automaticamente clampado via `useEffect`
 - Grid em phone: `gridTemplateColumns` fixa 1fr, `gridTemplateRows` fixa 180px
-- Container `<main>`: `overflow-x-hidden`
+- Container `<main>`: `overflow-x-clip` (clip não cria scroll container interno, evita barra dupla)
 
 ## Grid (entities/grid/ui/Grid.tsx)
 

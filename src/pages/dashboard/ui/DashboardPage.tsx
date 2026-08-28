@@ -165,7 +165,7 @@ function DashboardPage() {
         className='hidden'
       />
 
-      <main className='flex-1 overflow-x-hidden p-2'>
+      <main className='flex-1 overflow-x-clip p-2'>
         <Grid
           state={state}
           isPhone={isPhone}
